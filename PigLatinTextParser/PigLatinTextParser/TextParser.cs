@@ -16,16 +16,48 @@ namespace PigLatinTextParser
             return ret;
         }
 
-
-
-        public string makePigLatin(string inputText)
+        public string[] BreakUpText (string inputtext)
         {
-            foreach (char c in inputText)
-            char myChar = 'c'; //få myChar udplukket af teksten.
+            string[] array= inputtext.Split(' ');
+            return array;
+        }
 
+        //may need to be multithreadded
+        public string MakePigLatinWord(string inputWord)
+        {
+            bool AllStartingConsonantsFound = false;
+            string _consonants = "";
+
+            //store starting consonants in order
+            foreach (char c in inputWord)
+            {
+                
+                if (_isConsonant(c) == true & AllStartingConsonantsFound == false)
+                {
+                    _consonants = _consonants + c;
+                }
+                else
+                {
+                    AllStartingConsonantsFound = true;
+                    break;
+                }
+
+            }
+
+            //Does the word start with a consonant?
+            if (_consonants!= "")
+            {
+                //consonant pig-latin
+                inputWord = inputWord.Remove(0, _consonants.Length);
+                inputWord = inputWord + _consonants + "ay";
+            }
+            else
+            {
+                //simple vowel pig-latin
+                inputWord = inputWord + "yay";
+            }
             
-            
-            return "";
+            return inputWord;
         }
     }
 }
