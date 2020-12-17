@@ -6,6 +6,7 @@ namespace PigLatinTextParser
 {
     class TextFileHandler
     {
-       public string[] MyLines = System.IO.File.ReadAllLines(@"C:\Users\Public\TestFolder\WriteLines2.txt");
+        private const string Path = @"C:\Users\SA02- Frederik\Documents\Case05PigLatin\PigLatinTextParser\PigLatinTextParser\InputText\inputTexT.txt";
+        public string[] MyLines = System.IO.File.ReadAllLines(Path);
     }
 }
