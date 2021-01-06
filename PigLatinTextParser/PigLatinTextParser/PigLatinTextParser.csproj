@@ -6,7 +6,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="InputText\" />
     <Folder Include="OutputText\" />
   </ItemGroup>
 

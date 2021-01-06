@@ -8,14 +8,24 @@ namespace PigLatinTextParser
         static void Main(string[] args)
         {
             TextParser myParser = new TextParser();
+            TextFileHandler myTextFileHandler = new TextFileHandler();
 
-            string myOutput= myParser.MakePigLatinWord("'only'");
+            string myOutput= myParser.MakePigLatinWord("'Capitaltest.'");
+            Console.WriteLine(myOutput);
+            myTextFileHandler.ReadFiles();
 
-            string[] arrey = myParser.BreakUpText(myPlaceHolder);
+            foreach (var text in myTextFileHandler.RawText) 
+            { 
+                string[] words = myParser.BreakUpText(text);
+                foreach (string word in words)
+                {
+                   String newWord= myParser.MakePigLatinWord(word);
+                    Console.WriteLine(newWord); 
+                }
+            }
 
-            foreach (string s in arrey)
-            { Console.WriteLine(s); }
-            dsd
+           
+         
             Console.WriteLine(myOutput);
             
             //myParser.makePigLatin(myPlaceHolder);

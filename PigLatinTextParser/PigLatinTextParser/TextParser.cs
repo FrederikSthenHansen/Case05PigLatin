@@ -14,6 +14,11 @@ namespace PigLatinTextParser
         { 
             return Regex.IsMatch(input.ToString(), "[a-zæøå]", RegexOptions.IgnoreCase);
         }
+
+        private bool _isCapital(char input)
+        {
+            return Regex.IsMatch(input.ToString(), "[A-ZÆØÅ]");
+        }
         private bool _isConsonant(char input)
         {
             return "bcdfghjklmnprstvxz".IndexOf(input.ToString(), StringComparison.InvariantCultureIgnoreCase) >= 0; ;
@@ -25,56 +30,140 @@ namespace PigLatinTextParser
             return array;
         }
 
+        public char makeLetterCapital(char letter)
+        {
+            string val = letter.ToString();
+            val = val.ToUpper();
+            return val[0];
+        }
+        public char makeLetterLower(char letter)
+        {
+            string val = letter.ToString();
+            val = val.ToLower();
+            return val[0];
+        }
+
         //may need to be multithreadded
         public string MakePigLatinWord(string inputWord)
         {
+            bool firstLetterIsCapital = false;
             bool AllStartingConsonantsFound = false;
             string _consonants = "";
             string _punctuation = "";
-            int _firstConsonantIndex=0;
+            int _firstConsonantIndex = 0;
+            int _firstWovelIndex = 999; //meant to indexOutofRange
+            int _firstLetterIndex = 0;
+            int _lastletterIndex = 9999;
+            char[] charWord = inputWord.ToCharArray();
 
             //store starting consonants in order and store last punctuation if word ends with that
-            for (int c=0;c<inputWord.Length;c++)
+            for (int c = 0; c < charWord.Length; c++)
             {
-                //Is the the fist char a letter?
-                if (_isAlphaBet(inputWord[c]) == true)
+                //Is the the char a letter?
+                if (_isAlphaBet(charWord[c]) == true)
                 {
-                    if (_isConsonant(inputWord[c]) == true & AllStartingConsonantsFound == false)
+                    //Note the index of the first letter in the word 
+                    //(To handle my implementation of capital/lowercase correctly, if the word starts with punctuation)
+                    _firstLetterIndex = c;
+
+                    //Is the first char a vowel or consonant?
+                    if (_isConsonant(charWord[c]) == true & AllStartingConsonantsFound == false)
                     {
+                        //Consonant
+
                         if (_consonants == "")
                         {
                             _firstConsonantIndex = c;
+
+                            //if the first first consonant is the first letter in the word and a capital letter?
+                            if (_isCapital(inputWord[c]) && c == _firstLetterIndex)
+                            {
+                                //replace the consonant with a lowerCase version.
+                                charWord[c] = makeLetterLower(inputWord[c]);
+                                firstLetterIsCapital = true;
+                            }
                         }
-                        _consonants = _consonants + inputWord[c];
+
+                        //add the consonant to our consonants string for later use.
+                        _consonants = _consonants + charWord[c];
                     }
                     else
                     {
+                        //Wovel
                         AllStartingConsonantsFound = true;
-                        break;
+
+                        //set the index of the first Wovel.
+                        //(to be used in case we need the first Wovel to be a Capital letter).
+
+                        if (_firstWovelIndex == 999)
+                        { _firstWovelIndex = c; }
+
+                        
+                    }
+                }
+
+                //If the word contains no more letters we need to store punctuation, and remove from the word.
+                //This is done so we can affix any consonants at the end of the word, before adding punctuation again.
+                else 
+                {
+                    //is the char at the beginnin of the word?
+                    if (c > _firstLetterIndex)
+                    {
+                        _punctuation =_punctuation + $"{charWord[c]}";
+
+                        
+                        //is this the first non-letter char at the end of the word?
+                        if (_lastletterIndex == 9999)
+                        { //note that this is the end of the word
+                            _lastletterIndex = c - 1; }
+                        
+                       
                     }
                 }
             }
 
-            //If the last char is punctuation store it, and remove from the word.
-            if (_isAlphaBet(inputWord[inputWord.Length - 1]) == false)
+        
+                //Does the word start with a consonant?
+                if (_consonants!= "")
             {
-                _punctuation = $"{inputWord[inputWord.Length - 1]}";
-                inputWord = inputWord.Remove(inputWord.Length - 1);   
-            }
+                if (firstLetterIsCapital == true)
+                {
+                    //if _firstWovelindex is not out of range, the word starts with a capitol letter
+                    if(_firstWovelIndex!=999)
+                    {
+                        //therefore the first Wovel needs to be turned capitol.
+                       charWord[_firstWovelIndex] = makeLetterCapital(inputWord[_firstWovelIndex]); 
+                    }
+                 
+                }
 
-            //Does the word start with a consonant?
-            if (_consonants!= "")
-            {
-                //consonant pig-latin and re-add the punctuation
+                //with all character alterations complete we have no more use for charWord
+                //and as such we turn it back into to our string, overwriting the old content in the process.
+                inputWord = new string(charWord);
+                // remove punctuation, perform consonant pig-latin and re-add the punctuation
+                
                 inputWord = inputWord.Remove(_firstConsonantIndex, _consonants.Length);
+                inputWord = removeEndingPunctuation(inputWord,_lastletterIndex + 1, _punctuation.Length);
                 inputWord = inputWord + _consonants + "ay" + _punctuation;
             }
             else
             {
-                //simple vowel pig-latin and re-add the punctuation
+                //remove punctuation, perform simple vowel pig-latin and re-add the punctuation
+                inputWord = removeEndingPunctuation(inputWord, _lastletterIndex + 1, _punctuation.Length);
                 inputWord = inputWord + "yay" + _punctuation;
             }
-            return inputWord;
+
+            
+            return inputWord;  
+        }
+        private string removeEndingPunctuation(string word, int start, int amount)
+        {
+            //is there punctuation to be removed?
+            if(amount!=0)
+            {
+                word = word.Remove(start-1, amount);
+            }
+            return word;
         }
     }
 }
