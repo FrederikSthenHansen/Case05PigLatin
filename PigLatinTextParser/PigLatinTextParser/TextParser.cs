@@ -97,8 +97,7 @@ namespace PigLatinTextParser
 
                         if (_firstWovelIndex == 999)
                         { _firstWovelIndex = c; }
-
-                        
+                        /// TODO: check at c+1 er en consonant og angiv sidse bogstavplacering hvis sandt.
                     }
                 }
 
@@ -112,10 +111,10 @@ namespace PigLatinTextParser
                         _punctuation =_punctuation + $"{charWord[c]}";
 
                         
-                        //is this the first non-letter char at the end of the word?
-                        if (_lastletterIndex == 9999)
-                        { //note that this is the end of the word
-                            _lastletterIndex = c - 1; }
+                        
+                        //if (_lastletterIndex != 9999)
+                        //{ //note that this is the end of the word
+                        //    _lastletterIndex = c - 1; }
                         
                        
                     }
