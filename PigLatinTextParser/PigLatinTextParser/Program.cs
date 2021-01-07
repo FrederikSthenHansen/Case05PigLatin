@@ -10,19 +10,25 @@ namespace PigLatinTextParser
             TextParser myParser = new TextParser();
             TextFileHandler myTextFileHandler = new TextFileHandler();
 
-            string myOutput= myParser.MakePigLatinWord("'Next-to-last.'");
-            Console.WriteLine(myOutput);
-            myTextFileHandler.ReadFiles();
+            const string _inputTextPathProject = @"C:\Users\SA02- Frederik\Documents\Case05PigLatin\PigLatinTextParser\PigLatinTextParser\InputText\";
+            const string _inputTextPathDesktopDoc = @"C:\Users\SA02- Frederik\Desktop\CSharpNote.doc";
 
-            foreach (var text in myTextFileHandler.RawText) 
-            { 
-                string[] words = myParser.BreakUpText(text);
-                foreach (string word in words)
-                {
-                   String newWord= myParser.MakePigLatinWord(word);
-                    Console.WriteLine(newWord); 
-                }
-            }
+
+            const string quote = "\"";
+            string myOutput= myParser.MakePigLatinWord($"{quote}TestOutSideFile!{quote}");
+            Console.WriteLine(myOutput);
+            //myTextFileHandler.ReadFiles();
+
+            myTextFileHandler.WritePigLatinFile(_inputTextPathProject);
+            //foreach (var text in myTextFileHandler.RawText) 
+            //{ 
+            //    string[] words = myParser.BreakUpText(text);
+            //    foreach (string word in words)
+            //    {
+            //       String newWord= myParser.MakePigLatinWord(word);
+            //        Console.WriteLine(newWord); 
+            //    }
+            //}
 
            
          

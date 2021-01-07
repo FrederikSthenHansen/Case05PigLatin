@@ -30,6 +30,27 @@ namespace PigLatinTextParser
             return array;
         }
 
+        public string RebuildWholeText(string[] inputArray)
+        {
+            string ret="";
+            foreach (string line in inputArray)
+            {
+                ret = ret + line;
+            }
+            return ret;
+        }
+        public string RebuildTextLine(string[] inputArray)
+        {
+            string ret = "";
+
+            foreach (string myString in inputArray)
+            {
+                ret = ret + myString+ " ";
+            }
+
+            return ret;
+        }
+
         /// <summary>
         /// 
         /// </summary>
@@ -67,7 +88,7 @@ namespace PigLatinTextParser
             if (amount != 0 && checkIndexIsLegal(start,word.Length)==true)
             {
                 //start-1 why??
-                word = word.Remove(start - 1, amount);
+                word = word.Remove(start, amount);
             }
             return word;
         }
@@ -100,7 +121,16 @@ namespace PigLatinTextParser
             int _firstConsonantIndex = 0;
             int _firstWovelIndex = 999; //meant to indexOutofRange
             int _firstLetterIndex = 0;
-            int _lastletterIndex = 9999;
+
+            int _lastletterIndex (char[] inputArray)
+            { int ret=0;
+                //reverse forloop to find last letter.
+                for (int c= inputArray.Length-1; c >= 0; c--)
+                {
+                    if (_isAlphaBet(inputArray[c])==true) { ret = c; break; }
+                }
+                return ret;
+            }
             char[] charWord = inputWord.ToCharArray();
 
             //store starting consonants in order and store last punctuation if word ends with that
@@ -132,9 +162,17 @@ namespace PigLatinTextParser
                             //if the first first consonant is the first letter in the word and a capital letter?
                             if (_isCapital(inputWord[c]) && c == _firstLetterIndex)
                             {
-                                //replace the consonant with a lowerCase version.
-                                charWord[c] = makeLetterLower(inputWord[c]);
-                                firstLetterIsCapital = true;
+                                //Check the word is not all caps (fx. USA, FIFA)
+                                if (checkIndexIsLegal(_lastletterIndex(charWord), charWord.Length) == true)
+                                {
+                                    if (_isCapital(charWord[_lastletterIndex(charWord)]) == false)
+                                    {
+                                        //replace the consonant with a lowerCase version.
+                                        charWord[c] = makeLetterLower(inputWord[c]);
+                                        firstLetterIsCapital = true;
+                                    } 
+                                }
+                                
                             }
                         }
 
@@ -143,7 +181,8 @@ namespace PigLatinTextParser
                     }
                     else
                     {
-                        //Wovel
+                        //Wovel OR consonant at the end of the word
+
                         AllStartingConsonantsFound = true;
 
                         //set the index of the first Wovel.
@@ -162,8 +201,12 @@ namespace PigLatinTextParser
                                 if (checkIndexIsLegal(c+2,charWord.Length))
                                 { //check if c+2 is punctuation to prevent "words-like-this" from causing bugs.
                                     if (_isAlphaBet(charWord[c + 2]) != true)
-                                    { _lastletterIndex = c; }
+                                    { /*_lastletterIndex = c;*/ }
                                 }
+                                //else
+                                //{//if there is no entry at c+2 we have checked all we need to make c the _lastletterIndex
+                                //    _lastletterIndex(charWord) = c;
+                                //}
                             }
                         }
                     }
@@ -174,7 +217,7 @@ namespace PigLatinTextParser
                 else
                 {
                     //is the char at the beginnin of the word?
-                    if (c > _lastletterIndex)
+                    if (c > _lastletterIndex(charWord))
                     {
                         _punctuation = _punctuation + $"{charWord[c]}";
                     }
@@ -200,9 +243,9 @@ namespace PigLatinTextParser
                 //and as such we turn it back into to our string, overwriting the old content in the process.
                 inputWord = new string(charWord);
                 // remove punctuation, perform consonant pig-latin and re-add the punctuation
-
+                
+                inputWord = removeEndingPunctuation(inputWord, _lastletterIndex(charWord) + 1, _punctuation.Length);
                 inputWord = inputWord.Remove(_firstConsonantIndex, _consonants.Length);
-                inputWord = removeEndingPunctuation(inputWord, _lastletterIndex + 1, _punctuation.Length);
                 inputWord = inputWord + _consonants + "ay" + _punctuation;
             }
 
@@ -223,7 +266,7 @@ namespace PigLatinTextParser
                         //Check if the Word starts with a letter (if not it is not a word, and should not be modified)
                         if (_isAlphaBet(inputWord[_firstLetterIndex]) == true)
                         {
-                            inputWord = removeEndingPunctuation(inputWord, _lastletterIndex + 1, _punctuation.Length);
+                            inputWord = removeEndingPunctuation(inputWord, _lastletterIndex(charWord)+1, _punctuation.Length);
                             inputWord = inputWord + "yay" + _punctuation;
                             //remove punctuation, perform simple vowel pig-latin and re-add the punctuation
 
