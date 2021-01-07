@@ -97,7 +97,20 @@ namespace PigLatinTextParser
 
                         if (_firstWovelIndex == 999)
                         { _firstWovelIndex = c; }
-                        /// TODO: check at c+1 er en consonant og angiv sidse bogstavplacering hvis sandt.
+                        /// TODO: check at c+1 er en er punctuation og angiv sidse bogstavplacering hvis sandt.
+                        /// 
+
+                        try
+                        {
+                            if (_isAlphaBet(charWord[c + 1]) != true)
+                            {
+                                _lastletterIndex = c;
+                            }
+                        }
+                        catch (System.IndexOutOfRangeException)
+                        {
+                            //do nothing, since this should only trigger if the word has no ending punctuation
+                        }
                     }
                 }
 
@@ -106,17 +119,9 @@ namespace PigLatinTextParser
                 else 
                 {
                     //is the char at the beginnin of the word?
-                    if (c > _firstLetterIndex)
+                    if (c > _lastletterIndex)
                     {
-                        _punctuation =_punctuation + $"{charWord[c]}";
-
-                        
-                        
-                        //if (_lastletterIndex != 9999)
-                        //{ //note that this is the end of the word
-                        //    _lastletterIndex = c - 1; }
-                        
-                       
+                        _punctuation = _punctuation + $"{charWord[c]}";
                     }
                 }
             }
