@@ -15,14 +15,28 @@ namespace PigLatinTextParser
         private string[] TreatedTextArray= new string[] {""};
         private string TreatedText;
 
-
-        //Needs Refactoring to accept docx format
-        public string[] ReadFiles(string path)
+        private string[] readTXT(string path)
         {
             string[] files = Directory.GetFiles(path);
-            string[] ret= new string[] {""};
-            foreach (string myFile in files) {ret= System.IO.File.ReadAllLines(myFile); }
+            string[] ret = new string[] { "" };
+            foreach (string myFile in files) { ret = System.IO.File.ReadAllLines(myFile); }
+            return files;
+        }
 
+        //Needs Refactoring to accept docx format and other formats
+        public string[] ReadFiles(string path)
+        {
+            string[] ret = new string[] { "" };
+            //TODO: Be Change method to be able to read from PDF files and other file types.
+            //TODO: make this method able to read files format from path, and select the right file reading method.
+            if (true) //Make this statement check for file format is txt.
+            {
+                ret = readTXT(path);
+            }
+            else if (false) //other file format to be entered here
+            {
+
+            }
             return ret;
         }
 
