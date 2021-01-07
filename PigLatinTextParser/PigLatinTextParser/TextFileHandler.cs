@@ -6,10 +6,8 @@ using System.Text;
 namespace PigLatinTextParser
 {
     class TextFileHandler
-    {
+    {   const string outputPath = @"C:\Users\SA02- Frederik\Documents\Case05PigLatin\PigLatinTextParser\PigLatinTextParser\OutputText\OutputText.txt"; 
         TextParser myParser = new TextParser();
-        
-        
         
         private string[] RawTextArray;
         private string[] TreatedTextArray= new string[] {""};
@@ -17,10 +15,10 @@ namespace PigLatinTextParser
 
         private string[] readTXT(string path)
         {
-            string[] files = Directory.GetFiles(path);
+     
             string[] ret = new string[] { "" };
-            foreach (string myFile in files) { ret = System.IO.File.ReadAllLines(myFile); }
-            return files;
+            string[] lines = File.ReadAllLines(path);
+            return ret;
         }
 
         //Needs Refactoring to accept docx format and other formats
@@ -69,7 +67,7 @@ namespace PigLatinTextParser
             }
             //the finished text is printed to console
             Console.WriteLine(TreatedText);
-            File.WriteAllText(@"C:\Users\SA02- Frederik\Documents\Case05PigLatin\PigLatinTextParser\PigLatinTextParser\OutputText\OutputText.txt", TreatedText);
+            File.WriteAllText(outputPath, TreatedText);
             //TODO: write finished text to new .TXT file in output folder.
         }
     }
