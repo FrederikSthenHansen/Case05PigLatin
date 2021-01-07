@@ -55,7 +55,7 @@ namespace PigLatinTextParser
             }
             //the finished text is printed to console
             Console.WriteLine(TreatedText);
-
+            File.WriteAllText(@"C:\Users\SA02- Frederik\Documents\Case05PigLatin\PigLatinTextParser\PigLatinTextParser\OutputText\OutputText.txt", TreatedText);
             //TODO: write finished text to new .TXT file in output folder.
         }
     }
