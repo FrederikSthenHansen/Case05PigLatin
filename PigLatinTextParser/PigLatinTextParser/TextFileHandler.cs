@@ -7,7 +7,7 @@ namespace PigLatinTextParser
 {
     class TextFileHandler
     {
-        string[] files = Directory.GetFiles(@"C:\Users\SA02- Frederik\Documents\Case05PigLatin\PigLatinTextParser\PigLatinTextParser\..");
+        string[] files = Directory.GetFiles(@"C:\Users\SA02- Frederik\Documents\Case05PigLatin\PigLatinTextParser\PigLatinTextParser\InputText\");
         public string[] RawText;
         public void ReadFiles()
         {

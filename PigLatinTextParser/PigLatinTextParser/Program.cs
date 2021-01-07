@@ -10,7 +10,7 @@ namespace PigLatinTextParser
             TextParser myParser = new TextParser();
             TextFileHandler myTextFileHandler = new TextFileHandler();
 
-            string myOutput= myParser.MakePigLatinWord("'Capitaltest.'");
+            string myOutput= myParser.MakePigLatinWord("'next-to-last.'");
             Console.WriteLine(myOutput);
             myTextFileHandler.ReadFiles();
 
