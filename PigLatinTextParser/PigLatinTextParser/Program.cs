@@ -15,24 +15,14 @@ namespace PigLatinTextParser
 
 
             const string quote = "\"";
-            string myOutput= myParser.MakePigLatinWord($"{quote}TestOutSideFile!{quote}");
+            string myOutput= myParser.MakePigLatinWord(System.Environment.NewLine+$"{quote}TestOutSideFile!{quote}"+System.Environment.NewLine);
             Console.WriteLine(myOutput);
-            //myTextFileHandler.ReadFiles();
-
-            myTextFileHandler.WritePigLatinFile(_inputTextPathProject);
-            //foreach (var text in myTextFileHandler.RawText) 
-            //{ 
-            //    string[] words = myParser.BreakUpText(text);
-            //    foreach (string word in words)
-            //    {
-            //       String newWord= myParser.MakePigLatinWord(word);
-            //        Console.WriteLine(newWord); 
-            //    }
-            //}
-
            
-         
+            myTextFileHandler.WritePigLatinFile(_inputTextPathProject);
+           
             Console.WriteLine(myOutput);
+
+            Console.ReadKey();
             
             //myParser.makePigLatin(myPlaceHolder);
             

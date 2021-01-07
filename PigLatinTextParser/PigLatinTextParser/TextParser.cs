@@ -35,18 +35,19 @@ namespace PigLatinTextParser
             string ret="";
             foreach (string line in inputArray)
             {
-                ret = ret + line;
+                ret =string.Join("", inputArray);
+                ret = ret + System.Environment.NewLine;
+                return ret;
             }
             return ret;
         }
-        public string RebuildTextLine(string[] inputArray)
+        public string RebuildTextLine(string inputWord)
         {
             string ret = "";
 
-            foreach (string myString in inputArray)
-            {
-                ret = ret + myString+ " ";
-            }
+           
+                ret = ret + inputWord+ " ";
+            
 
             return ret;
         }
