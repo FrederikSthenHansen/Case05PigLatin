@@ -45,15 +45,15 @@ namespace PigLatinTextParser
         public string[] ReadFiles(string path)
         {
             string[] ret = new string[] { "" };
-            //TODO: Be Change method to be able to read from PDF files and other file types.
-            //TODO: make this method able to read files format from path, and select the right file reading method.
+            
+            string myFileType = Path.GetExtension(path);
+            Console.WriteLine("File has the extension: " + myFileType);
 
-
-            if (false) //Make this statement check for file format is txt.
+            if (myFileType==".txt") 
             {
                 ret = readTXT(path);
             }
-            else if (true) //other file format to be entered here
+            else if (myFileType==".pdf") 
             {
                 ret = readPDF(path);
             }

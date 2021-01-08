@@ -10,7 +10,7 @@ namespace PigLatinTextParser
             TextParser myParser = new TextParser();
             TextFileHandler myTextFileHandler = new TextFileHandler();
 
-            const string _inputTextPathProject = @"C:\Users\SA02- Frederik\Documents\Case05PigLatin\PigLatinTextParser\PigLatinTextParser\InputText\InputText.Txt";
+            const string _inputTextPathProject = @"C:\Users\SA02- Frederik\Documents\Case05PigLatin\PigLatinTextParser\PigLatinTextParser\InputText\InputText.txt";
             const string _inputTextPathDesktop = @"C:\Users\SA02- Frederik\Desktop\Case5.pdf";
 
 
