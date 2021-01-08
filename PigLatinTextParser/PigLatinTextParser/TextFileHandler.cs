@@ -9,7 +9,7 @@ namespace PigLatinTextParser
     {   const string outputPath = @"C:\Users\SA02- Frederik\Documents\Case05PigLatin\PigLatinTextParser\PigLatinTextParser\OutputText\OutputText.txt"; 
         TextParser myParser = new TextParser();
         
-        private string[] RawTextArray;
+        private string[] RawTextArray = new string[] { "" };
         private string[] TreatedTextArray= new string[] {""};
         private string TreatedText;
 
