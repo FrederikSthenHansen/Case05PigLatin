@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
+using UglyToad.PdfPig;
+using UglyToad.PdfPig.Content;
 
 namespace PigLatinTextParser
 {
@@ -12,6 +14,24 @@ namespace PigLatinTextParser
         private string[] RawTextArray = new string[] { "" };
         private string[] TreatedTextArray= new string[] {""};
         private string TreatedText;
+
+        private string[] readPDF(string path)
+        {
+            
+            using (PdfDocument document = PdfDocument.Open(path))
+            {
+                string[] ret = new string[document.NumberOfPages];
+                for (int page=1; page<document.NumberOfPages;page++)
+                {
+                    Page myPage= document.GetPage(page);
+                    string pageText = myPage.Text;
+
+                    ret[page - 1] = pageText;
+                }
+                return ret;
+            }
+            
+        }
 
         private string[] readTXT(string path)
         {
@@ -27,13 +47,15 @@ namespace PigLatinTextParser
             string[] ret = new string[] { "" };
             //TODO: Be Change method to be able to read from PDF files and other file types.
             //TODO: make this method able to read files format from path, and select the right file reading method.
-            if (true) //Make this statement check for file format is txt.
+
+
+            if (false) //Make this statement check for file format is txt.
             {
                 ret = readTXT(path);
             }
-            else if (false) //other file format to be entered here
+            else if (true) //other file format to be entered here
             {
-
+                ret = readPDF(path);
             }
             return ret;
         }

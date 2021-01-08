@@ -11,14 +11,14 @@ namespace PigLatinTextParser
             TextFileHandler myTextFileHandler = new TextFileHandler();
 
             const string _inputTextPathProject = @"C:\Users\SA02- Frederik\Documents\Case05PigLatin\PigLatinTextParser\PigLatinTextParser\InputText\InputText.Txt";
-            const string _inputTextPathDesktopDoc = @"C:\Users\SA02- Frederik\Desktop\CSharpNote.doc";
+            const string _inputTextPathDesktop = @"C:\Users\SA02- Frederik\Desktop\Case5.pdf";
 
 
             const string quote = "\"";
             string myOutput= myParser.MakePigLatinWord(System.Environment.NewLine+$"{quote}TestOutSideFile!{quote}"+System.Environment.NewLine);
             Console.WriteLine(myOutput);
            
-            myTextFileHandler.WritePigLatinFile(_inputTextPathProject);
+            myTextFileHandler.WritePigLatinFile(_inputTextPathDesktop);
            
             Console.WriteLine(myOutput);
 

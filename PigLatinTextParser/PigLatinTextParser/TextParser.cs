@@ -26,7 +26,10 @@ namespace PigLatinTextParser
 
         public string[] BreakUpText(string inputtext)
         {
-            string[] array = inputtext.Split(' ');
+            string[] array = new string[] { "" };
+            if (inputtext != null)
+            { array = inputtext.Split(' '); }
+            
             return array;
         }
 
@@ -252,12 +255,7 @@ namespace PigLatinTextParser
 
             //Word has no starting consonants
             else
-            {   //if there is no characters in the inputputword, we cannot run the code in else block,
-                //since that would index out of range
-                if (inputWord == "")
-                {
-
-                }
+            {                
 
 
                 //if there is no characters in the inputputword, we cannot run the code in else block,
