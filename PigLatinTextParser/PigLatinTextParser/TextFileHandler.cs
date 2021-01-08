@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
+using System.Threading.Tasks;
 using UglyToad.PdfPig;
 using UglyToad.PdfPig.Content;
 
@@ -10,11 +11,17 @@ namespace PigLatinTextParser
     class TextFileHandler
     {   const string outputPath = @"C:\Users\SA02- Frederik\Documents\Case05PigLatin\PigLatinTextParser\PigLatinTextParser\OutputText\OutputText.txt"; 
         TextParser myParser = new TextParser();
-        
+
+        #region General Properties
         private string[] RawTextArray = new string[] { "" };
         private string[] TreatedTextArray= new string[] {""};
         private string TreatedText;
         private string _myFileType = "";
+        #endregion
+
+        #region PDF layout properties
+
+        #endregion
 
         private string[] readPDF(string path)
         {
@@ -24,15 +31,31 @@ namespace PigLatinTextParser
                 string[] ret = new string[document.NumberOfPages];
                 for (int page=1; page<document.NumberOfPages;page++)
                 {
-                    Page myPage= document.GetPage(page);
+                    #region Reading text for Linguistic logic purposes
+                    Page myPage = document.GetPage(page);
                     string pageText = myPage.Text;
                 
                     ret[page - 1] = pageText;
                     Console.WriteLine(ret[page - 1]);
+                    #endregion
+
+                    #region Reading Letters for layout purposes
+                    readPDFLayout(myPage);
+                    #endregion
+
+
                 }
                 return ret;
             }
             
+        }
+
+         private async Task readPDFLayout(Page input)
+        {
+            foreach(Letter letter in input.Letters)
+            {
+              //  await { }
+            }
         }
 
         private string[] readTXT(string path)
@@ -101,7 +124,7 @@ namespace PigLatinTextParser
             //Todo: make PDF writing functionality
             if (_myFileType == ".pdf")
             {
-
+                
             }
             if (_myFileType == ".txt")
             {
