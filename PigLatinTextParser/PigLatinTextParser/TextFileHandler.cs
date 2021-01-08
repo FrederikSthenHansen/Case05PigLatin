@@ -14,6 +14,7 @@ namespace PigLatinTextParser
         private string[] RawTextArray = new string[] { "" };
         private string[] TreatedTextArray= new string[] {""};
         private string TreatedText;
+        private string _myFileType = "";
 
         private string[] readPDF(string path)
         {
@@ -25,8 +26,9 @@ namespace PigLatinTextParser
                 {
                     Page myPage= document.GetPage(page);
                     string pageText = myPage.Text;
-
+                
                     ret[page - 1] = pageText;
+                    Console.WriteLine(ret[page - 1]);
                 }
                 return ret;
             }
@@ -87,10 +89,25 @@ namespace PigLatinTextParser
                 TreatedText = TreatedText+ myParser.RebuildWholeText(TreatedTextArray);
                 
             }
-            //the finished text is printed to console
+
+            //the finished text is printed to console and written to outputFolder:
             Console.WriteLine(TreatedText);
-            File.WriteAllText(outputPath, TreatedText);
-            //TODO: write finished text to new .TXT file in output folder.
+
+
+            //Placeholdercode to allow PDF to be converted to txt
+            _myFileType = ".txt";
+            ///end placeholder
+
+            //Todo: make PDF writing functionality
+            if (_myFileType == ".pdf")
+            {
+
+            }
+            if (_myFileType == ".txt")
+            {
+                File.WriteAllText(outputPath, TreatedText);
+            }
+            
         }
     }
 }
