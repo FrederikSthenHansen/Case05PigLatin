@@ -5,23 +5,61 @@ using System.Text;
 using System.Threading.Tasks;
 using UglyToad.PdfPig;
 using UglyToad.PdfPig.Content;
+using UglyToad.PdfPig.Core;
+using UglyToad.PdfPig.Fonts.Standard14Fonts;
+using UglyToad.PdfPig.Writer;
 
 namespace PigLatinTextParser
 {
     class TextFileHandler
-    {   const string outputPath = @"C:\Users\SA02- Frederik\Documents\Case05PigLatin\PigLatinTextParser\PigLatinTextParser\OutputText\OutputText.txt"; 
+    { const string _outputPath = @"C:\Users\SA02- Frederik\Documents\Case05PigLatin\PigLatinTextParser\PigLatinTextParser\OutputText\OutputText";
         TextParser myParser = new TextParser();
 
         #region General Properties
         private string[] RawTextArray = new string[] { "" };
-        private string[] TreatedTextArray= new string[] {""};
+        private string[] TreatedTextArray = new string[] { "" };
         private string TreatedText;
         private string _myFileType = "";
         #endregion
 
         #region PDF layout properties
+        PdfDocument pigLatinPDF;
+        PdfDocumentBuilder builder = new PdfDocumentBuilder();
 
         #endregion
+
+        private void writePDFOutput()
+        {
+            
+
+            PdfPageBuilder page = builder.AddPage(PageSize.A4);
+
+            // Fonts must be registered with the document builder prior to use to prevent duplication.
+            PdfDocumentBuilder.AddedFont font = builder.AddStandard14Font(Standard14Font.Helvetica);
+            
+            //setting starting poin to write from.
+            PdfPoint point = new PdfPoint(25, 700);
+            //page.AddText(TreatedText, 12, point, font); 
+            TreatedText = TreatedText.Replace(":", ".");
+            TreatedTextArray = TreatedText.Split(".");
+            
+            page.AddText($"This is a Placeholder! {TreatedTextArray[0]}  This is a placeholder.", 12, point, font);
+            //for (int line=0;line<input.Length;line++)
+            //{
+            //    try { page.AddText(input[line], 12, point, font); }
+            //    catch (InvalidOperationException)
+            //    {
+
+            //    }
+            //    point.MoveY(14);
+            //}
+
+
+
+            byte[] documentBytes = builder.Build();
+
+            File.WriteAllBytes(_outputPath+_myFileType, documentBytes);
+        }
 
         private string[] readPDF(string path)
         {
@@ -34,23 +72,28 @@ namespace PigLatinTextParser
                     #region Reading text for Linguistic logic purposes
                     Page myPage = document.GetPage(page);
                     string pageText = myPage.Text;
-                
-                    ret[page - 1] = pageText;
-                    Console.WriteLine(ret[page - 1]);
+                    pageText= pageText.TrimStart();
+                    pageText = pageText.TrimEnd();
+                    
+                    //layout edits
+                    ret = pageText.Split(". ");
+                    for (int line = 0; line < ret.Length; line++)
+                    {
+                        ret[line]=ret[line]+".";
+                    }
                     #endregion
 
                     #region Reading Letters for layout purposes
-                    readPDFLayout(myPage);
+                    //pigLatinPDF = new PdfDocument(document.NumberOfPages);
+                   //pigLatinPDF.GetPage(page) readPDFLayout(myPage, document.NumberOfPages);
                     #endregion
-
-
                 }
                 return ret;
             }
             
         }
 
-         private async Task readPDFLayout(Page input)
+         private async Task readPDFLayout(Page input, int pageCount)
         {
             foreach(Letter letter in input.Letters)
             {
@@ -71,14 +114,14 @@ namespace PigLatinTextParser
         {
             string[] ret = new string[] { "" };
             
-            string myFileType = Path.GetExtension(path);
-            Console.WriteLine("File has the extension: " + myFileType);
+           _myFileType = Path.GetExtension(path);
+            Console.WriteLine("File has the extension: " + _myFileType);
 
-            if (myFileType==".txt") 
+            if (_myFileType==".txt") 
             {
                 ret = readTXT(path);
             }
-            else if (myFileType==".pdf") 
+            else if (_myFileType==".pdf") 
             {
                 ret = readPDF(path);
             }
@@ -88,10 +131,13 @@ namespace PigLatinTextParser
         public void WritePigLatinFile(string filePath) 
         {
             RawTextArray = ReadFiles(filePath);
-
+            //int linetracker=0;
             //First we take in the string array (bunch of text lines) from readfiles
+            Console.WriteLine();
+            Console.WriteLine("Printing the text as read raw from the input file:");
             foreach (string line in RawTextArray)
             {
+                Console.WriteLine(line);
                 //Strings are broken down into individual words
                 string[] words = myParser.BreakUpText(line);
 
@@ -107,28 +153,34 @@ namespace PigLatinTextParser
                     //each line is reconstruced word by word
                     TreatedTextArray[w] = myParser.RebuildTextLine(words[w]);
                 }
+
                 
                 //Then all lines are added back together to reform the text.
                 TreatedText = TreatedText+ myParser.RebuildWholeText(TreatedTextArray);
+               
                 
             }
-
             //the finished text is printed to console and written to outputFolder:
+            Console.WriteLine();
+            Console.WriteLine("Now Printing the parsed text:");
             Console.WriteLine(TreatedText);
+            Console.WriteLine();
 
 
             //Placeholdercode to allow PDF to be converted to txt
-            _myFileType = ".txt";
+            //_myFileType = ".txt";
             ///end placeholder
 
             //Todo: make PDF writing functionality
             if (_myFileType == ".pdf")
             {
-                
+                Console.WriteLine("Printing output to PDF file");
+                writePDFOutput();
             }
             if (_myFileType == ".txt")
             {
-                File.WriteAllText(outputPath, TreatedText);
+                Console.WriteLine("Printing output to TXT file");
+                 File.WriteAllText(_outputPath+_myFileType, TreatedText);
             }
             
         }
