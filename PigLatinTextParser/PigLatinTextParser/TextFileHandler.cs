@@ -42,11 +42,12 @@ namespace PigLatinTextParser
             //page.AddText(TreatedText, 12, point, font); 
             TreatedText = TreatedText.Replace(":", ".");
             TreatedTextArray = TreatedText.Split(".");
-            
+
             page.AddText($"This is a Placeholder! {TreatedTextArray[0]}  This is a placeholder.", 12, point, font);
-            //for (int line=0;line<input.Length;line++)
+            point.MoveY(14);
+            //for (int line = 0; line < TreatedTextArray.Length; line++)
             //{
-            //    try { page.AddText(input[line], 12, point, font); }
+            //    try { page.AddText(TreatedTextArray[line], 12, point, font); }
             //    catch (InvalidOperationException)
             //    {
 
@@ -106,6 +107,7 @@ namespace PigLatinTextParser
      
             string[] ret = new string[] { "" };
             string[] lines = File.ReadAllLines(path);
+            ret = lines;
             return ret;
         }
 

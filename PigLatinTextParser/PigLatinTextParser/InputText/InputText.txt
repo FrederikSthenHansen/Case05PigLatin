@@ -1,3 +1,0 @@
-The following example demonstrates the "Remove method". 
-The next-to-last case removes all text starting from the specified index through the end of the string. 
-The last case removes three characters starting from the specified index.

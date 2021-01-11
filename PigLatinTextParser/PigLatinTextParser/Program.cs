@@ -10,8 +10,8 @@ namespace PigLatinTextParser
             TextParser myParser = new TextParser();
             TextFileHandler myTextFileHandler = new TextFileHandler();
 
-            const string _inputTextPathProject = @"C:\Users\SA02- Frederik\Documents\Case05PigLatin\PigLatinTextParser\PigLatinTextParser\InputText\InputText.txt";
-            const string _inputTextPathDesktop = @"C:\Users\SA02- Frederik\Desktop\Case5.pdf";
+            const string _inputTextPathTxt = @"C:\Users\SA02- Frederik\Desktop\InputText.txt";
+            const string _inputTextPathPDF = @"C:\Users\SA02- Frederik\Desktop\Case5.pdf";
 
             #region language logic test
             const string quote = "\"";
@@ -20,7 +20,7 @@ namespace PigLatinTextParser
             Console.WriteLine();
             #endregion
 
-            myTextFileHandler.WritePigLatinFile(_inputTextPathDesktop);
+            myTextFileHandler.WritePigLatinFile(_inputTextPathTxt);
             // myTextFileHandler.WritePigLatinFile(_inputTextPathProject);
 
 

@@ -1,7 +1,3 @@
-Ecialistspay Academyyay Agligfay Udredningyay: Andidatkay Ersionvay Ogrammeringpray 2/2  Asecay: ”Igpay Atinlay” Oblemetpray Ivay alskay ugebray enyay oversætteryay. 
-Ivskray enyay oversætteryay erday ankay oversætteyay enyay ilkenhvay omsay elsthay eksttay ilfay iltay ”Igpay Atinlay”. 
-Iyay Igpay atinlay eryay etday igegyldigtlay omyay inputtekstenyay eryay Anskday elleryay Engelskyay, ekstentay alskay æseslay ogyay erday alskay øresgay oglenay implesay ingtay edvay erthvay ordyay, åsay eday ”irkervay” omsay atinlay. 
-Uday ankay indefay alleyay eglerneray orfay ”Igpay Atinlay” åpay wikipediayay. 
-://en.wikipedia.org/wiki/Pig_Latinhttpsay Uday alskay elsthay edmay ebuggingday ærktøjetvay unnekay okumentereday inday asseklay ukturstray. 
-(Ishvay etday eryay uligtmay) Alifikationerkvay erday estestay Ebuggingday: Iddelmay Ogrammeringpray: Ærsvay Øsningenlay Uday arhay avetlay opgavenyay ærdigfay årnay uday arhay etyay ogrampray erday ankay agetay imodyay enyay ilkenhvay omsay elsthay eksttay il(testfay ernegay edmay etyay arpay endtekay øger/historierbay), oversætteyay enday iltay ”Igpay Atinlay” ogyay avesay esultatetray iyay enyay ynay ilfay. 
-Årnay uday ankay isevay etday ammensay edmay enyay okumentation(gerneday avetlay edmay ælphjay afray itday ebuggingday ooltay) erday ortkay iservay ukturenstray iyay ineday asserklay, itday asseklay eirakihay ogyay ortkay eskriverbay erhvay afyay etodernemay iyay ineday asserklay.. 
+Ethay ollowingfay exampleyay emonstratesday ethay "Emoveray ethodmay".  
+Ethay ext-to-lastnay asecay emovesray allyay exttay artingstay omfray ethay ecifiedspay indexyay oughthray ethay endyay ofyay ethay ingstray.  
+Ethay astlay asecay emovesray eethray aracterschay artingstay omfray ethay ecifiedspay indexyay. 
