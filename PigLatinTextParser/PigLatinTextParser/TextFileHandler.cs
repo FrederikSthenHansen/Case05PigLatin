@@ -7,7 +7,7 @@ using UglyToad.PdfPig.Core;
 using UglyToad.PdfPig.Fonts.Standard14Fonts;
 using UglyToad.PdfPig.Writer;
 using Microsoft.Office.Interop.Word;
-using Microsoft.PowerBI.Api.Models;
+//using Microsoft.PowerBI.Api.Models;
 using Page = UglyToad.PdfPig.Content.Page;
 
 namespace PigLatinTextParser
