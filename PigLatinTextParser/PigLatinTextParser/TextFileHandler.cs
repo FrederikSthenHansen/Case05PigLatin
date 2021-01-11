@@ -1,13 +1,14 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Text;
 using System.Threading.Tasks;
 using UglyToad.PdfPig;
 using UglyToad.PdfPig.Content;
 using UglyToad.PdfPig.Core;
 using UglyToad.PdfPig.Fonts.Standard14Fonts;
 using UglyToad.PdfPig.Writer;
+using Microsoft.Office.Interop.Word;
+using Microsoft.PowerBI.Api.Models;
+using Page = UglyToad.PdfPig.Content.Page;
 
 namespace PigLatinTextParser
 {
@@ -94,7 +95,7 @@ namespace PigLatinTextParser
             
         }
 
-         private async Task readPDFLayout(Page input, int pageCount)
+         private async System.Threading.Tasks.Task readPDFLayout(Page input, int pageCount)
         {
             foreach(Letter letter in input.Letters)
             {
@@ -126,6 +127,18 @@ namespace PigLatinTextParser
             else if (_myFileType==".pdf") 
             {
                 ret = readPDF(path);
+            }
+            else if (_myFileType == ".docx")
+            {
+                //Microsoft.Office.Interop.Word.Application app = new Microsoft.Office.Interop.Word.Application();
+                //Console.WriteLine(app.Path);
+                //Document doc = app.Documents.Open(path);
+
+                //ret = doc.Content.Text.Split(".");
+                //for (int line = 0; line < ret.Length; line++)
+                //{
+                //    ret[line] = ret[line] + ".";
+                //}
             }
             return ret;
         }
@@ -170,7 +183,7 @@ namespace PigLatinTextParser
 
 
             //Placeholdercode to allow PDF to be converted to txt
-            //_myFileType = ".txt";
+            _myFileType = ".txt";
             ///end placeholder
 
             //Todo: make PDF writing functionality

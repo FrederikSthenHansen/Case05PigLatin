@@ -6,10 +6,13 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Folder Include="InputText\" />
     <Folder Include="OutputText\" />
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="Microsoft.Office.Interop.Word" Version="15.0.4797.1003" />
+    <PackageReference Include="Microsoft.PowerBI.Api" Version="3.20.1" />
     <PackageReference Include="PdfPig" Version="0.1.4" />
   </ItemGroup>
 
