@@ -195,24 +195,6 @@ namespace PigLatinTextParser
                         if (_firstWovelIndex == 999)
                         { _firstWovelIndex = c; }
 
-
-                        // Check if c+1 is a is punctuation as set _lastLetterIndex if it is.
-                        // Added check to prevent c+1 from indexing out of range.
-                        //if (checkIndexIsLegal(c+1, charWord.Length))
-                        //{
-                        //    if (_isAlphaBet(charWord[c + 1]) != true)
-                        //    {
-                        //        if (checkIndexIsLegal(c+2,charWord.Length))
-                        //        { //check if c+2 is punctuation to prevent "words-like-this" from causing bugs.
-                        //            if (_isAlphaBet(charWord[c + 2]) != true)
-                        //            { /*_lastletterIndex = c;*/ }
-                        //        }
-                        //        //else
-                        //        //{//if there is no entry at c+2 we have checked all we need to make c the _lastletterIndex
-                        //        //    _lastletterIndex(charWord) = c;
-                        //        //}
-                        //    }
-                        //}
                     }
                 }
 
