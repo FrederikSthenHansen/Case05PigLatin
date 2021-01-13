@@ -236,14 +236,13 @@ namespace PigLatinTextParser
             }
 
             //Word has no starting consonants
-            else
-            {                
+            else            {                
 
 
                 //if there is no characters in the inputputword, we cannot run the code in else block,
                 //since that would index out of range
                 if (inputWord!="")
-                    {
+                {
                         //Check if the Word starts with a letter (if not it is not a word, and should not be modified)
                         if (_isAlphaBet(inputWord[_firstLetterIndex]) == true)
                         {
@@ -252,7 +251,7 @@ namespace PigLatinTextParser
                             //remove punctuation, perform simple vowel pig-latin and re-add the punctuation
 
                         } 
-                    }
+                }
                 
             }
 

@@ -197,7 +197,9 @@ namespace PigLatinTextParser
                 Console.WriteLine("Printing output to TXT file");
                  File.WriteAllText(_outputPath+_myFileType, TreatedText);
             }
-            
+            //clean up
+            TreatedText = "";
+            TreatedTextArray = new string[] { "" }; 
         }
     }
 }
