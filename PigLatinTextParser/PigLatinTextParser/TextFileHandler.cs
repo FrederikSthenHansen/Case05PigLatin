@@ -200,6 +200,11 @@ namespace PigLatinTextParser
             if (_myFileType == ".txt")
             {
                 Console.WriteLine("Printing output to TXT file");
+                //Check if a file alreaddy exists with this name.
+                if (File.Exists(_outputPath + _fileName))
+                {//if it does, we need to edit the name of the new output file by adding a timestamp to make it unique.
+                    _fileName = _fileName.Replace(_myFileType, $"{DateTime.Now.Ticks}" + _myFileType);
+                }
                  File.WriteAllText(_outputPath+_fileName, TreatedText);
             }
             //clean up
