@@ -29,6 +29,19 @@ namespace PigLatinTextParser
 
         #endregion
 
+        public void ProcessInputFiles()
+        {
+            string myPath = new DirectoryInfo(Directory.GetCurrentDirectory()).Parent.Parent.Parent.FullName+@"\InputText";
+            Console.WriteLine("processing all files in: " + myPath);
+            string[] files = Directory.GetFiles(myPath);
+            
+            foreach (string file in files)
+            {
+                WritePigLatinFile(file);
+            }
+
+        }
+
         private void writePDFOutput()
         {
             
@@ -90,9 +103,7 @@ namespace PigLatinTextParser
                    //pigLatinPDF.GetPage(page) readPDFLayout(myPage, document.NumberOfPages);
                     #endregion
                 }
-                //Placeholder
-                _fileName = _fileName.Replace(".pdf", ".txt");
-                //end Placeholder
+                
                 return ret;
             }
             
@@ -116,7 +127,7 @@ namespace PigLatinTextParser
         }
 
         //Needs Refactoring to accept docx format and other formats
-        public string[] ReadFiles(string path)
+        private string[] readFile(string path)
         {
 
             string[] ret = new string[] { "" };
@@ -151,9 +162,9 @@ namespace PigLatinTextParser
         public void WritePigLatinFile(string filePath) 
         {
             //oceans of .Parents to back up  because it seems to defeault to /bin/debug for some reason. C:\Users\SA02- Frederik\Documents\Case05PigLatin\PigLatinTextParser\PigLatinTextParser\InputText
-            string fullPath = new DirectoryInfo(filePath).Parent.Parent.Parent.Parent.FullName+@"\InputText\"+filePath;
+            string fullPath = filePath;
             Console.WriteLine("path to intput is: "+fullPath);
-            RawTextArray = ReadFiles(fullPath);
+            RawTextArray = readFile(fullPath);
             //int linetracker=0;
             //First we take in the string array (bunch of text lines) from readfiles
             Console.WriteLine();
@@ -188,14 +199,21 @@ namespace PigLatinTextParser
             Console.WriteLine("Now Printing the parsed text:");
             Console.WriteLine(TreatedText);
             Console.WriteLine();
-            //test
 
-            //Placeholdercode to allow PDF to be converted to txt
-            _myFileType = ".txt";
+            #region Placeholdercode to allow PDF to be converted to txt
+
             Console.WriteLine("printing "+_fileName+" to .txt file");
-            ///end placeholder
+            _myFileType = ".txt";
 
-            //Todo: make PDF writing functionality
+            #endregion
+
+
+            fullPath = filePath.Replace(@"\InputText\", @"\OutputText\");//new DirectoryInfo(filePath).Parent.Parent.Parent.Parent.FullName + @"\OutputText\" + _fileName;
+            #region more pdf placeholder code
+            fullPath = fullPath.Replace(".pdf", _myFileType);
+            #endregion
+            string newFileName = "";
+
             if (_myFileType == ".pdf")
             {
                 Console.WriteLine("Printing output to PDF file");
@@ -205,11 +223,15 @@ namespace PigLatinTextParser
             {
                 Console.WriteLine("Printing output to TXT file");
                 //Check if a file alreaddy exists with this name.
-                if (File.Exists(_outputPath + _fileName))
-                {//if it does, we need to edit the name of the new output file by adding a timestamp to make it unique.
-                    _fileName = _fileName.Replace(_myFileType, $"-{DateTime.Now.Ticks}" + _myFileType);
-                }
-                fullPath = new DirectoryInfo(filePath).Parent.Parent.Parent.Parent.FullName + @"\OutputText\" + _fileName;
+                //if (File.Exists(fullPath))
+                //{//if it does, we need to edit the name of the new output file by adding a timestamp to make it unique.
+                //    newFileName = _fileName.Replace(_myFileType, $"-{DateTime.Now.Ticks}" + _myFileType);
+                //}
+                //else
+                //{
+                //    newFileName = _fileName;
+                //}
+                //fullPath = fullPath.Replace(_fileName, newFileName);
                 File.WriteAllText(fullPath, TreatedText);
             }
             //clean up

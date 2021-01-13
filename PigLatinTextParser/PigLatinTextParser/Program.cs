@@ -21,9 +21,11 @@ namespace PigLatinTextParser
             Console.WriteLine();
             #endregion
 
-            myTextFileHandler.WritePigLatinFile(_inputTextPathTxt);
-            myTextFileHandler.WritePigLatinFile(_inputTextPathPDF);
-            myTextFileHandler.WritePigLatinFile(_inputTextPathDocX);
+            myTextFileHandler.ProcessInputFiles();
+            
+            //myTextFileHandler.WritePigLatinFile(_inputTextPathTxt);
+            //myTextFileHandler.WritePigLatinFile(_inputTextPathPDF);
+            //myTextFileHandler.WritePigLatinFile(_inputTextPathDocX);
 
             Console.WriteLine("Parsing complete: Press any key to close the App");
             Console.ReadKey();
