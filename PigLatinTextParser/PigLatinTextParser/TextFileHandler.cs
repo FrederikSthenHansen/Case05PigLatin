@@ -209,11 +209,15 @@ namespace PigLatinTextParser
                 {//if it does, we need to edit the name of the new output file by adding a timestamp to make it unique.
                     _fileName = _fileName.Replace(_myFileType, $"-{DateTime.Now.Ticks}" + _myFileType);
                 }
-                 File.WriteAllText(_outputPath+_fileName, TreatedText);
+                fullPath = new DirectoryInfo(filePath).Parent.Parent.Parent.Parent.FullName + @"\OutputText\" + _fileName;
+                File.WriteAllText(fullPath, TreatedText);
             }
             //clean up
             TreatedText = "";
-            TreatedTextArray = new string[] { "" }; 
+            TreatedTextArray = new string[] { "" };
+            RawTextArray = new string[] { "" };
+            _fileName = "";
+            _myFileType = "";
         }
     }
 }
