@@ -10,9 +10,9 @@ namespace PigLatinTextParser
             TextParser myParser = new TextParser();
             TextFileHandler myTextFileHandler = new TextFileHandler();
 
-            const string _inputTextPathTxt = @"C:\Users\SA02- Frederik\Documents\Case05PigLatin\PigLatinTextParser\PigLatinTextParser\InputText\InputText.txt";
-            const string _inputTextPathPDF = @"C:\Users\SA02- Frederik\Documents\Case05PigLatin\PigLatinTextParser\PigLatinTextParser\InputText\Case5.pdf";
-            const string _inputTextPathDocX = @"C:\Users\SA02- Frederik\Documents\Case05PigLatin\PigLatinTextParser\PigLatinTextParser\InputText\Case5.docx";
+            const string _inputTextPathTxt = @"InputText.txt";
+            const string _inputTextPathPDF = @"Case5.pdf";
+            const string _inputTextPathDocX = @"Case5.docx";
 
             #region language logic test
             const string quote = "\"";

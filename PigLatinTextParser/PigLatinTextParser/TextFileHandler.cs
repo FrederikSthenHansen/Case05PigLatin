@@ -118,6 +118,7 @@ namespace PigLatinTextParser
         //Needs Refactoring to accept docx format and other formats
         public string[] ReadFiles(string path)
         {
+
             string[] ret = new string[] { "" };
             
            _myFileType = Path.GetExtension(path);
@@ -149,7 +150,10 @@ namespace PigLatinTextParser
 
         public void WritePigLatinFile(string filePath) 
         {
-            RawTextArray = ReadFiles(filePath);
+            //oceans of .Parents to back up  because it seems to defeault to /bin/debug for some reason. C:\Users\SA02- Frederik\Documents\Case05PigLatin\PigLatinTextParser\PigLatinTextParser\InputText
+            string fullPath = new DirectoryInfo(filePath).Parent.Parent.Parent.Parent.FullName+@"\InputText\"+filePath;
+            Console.WriteLine("path to intput is: "+fullPath);
+            RawTextArray = ReadFiles(fullPath);
             //int linetracker=0;
             //First we take in the string array (bunch of text lines) from readfiles
             Console.WriteLine();
@@ -184,7 +188,7 @@ namespace PigLatinTextParser
             Console.WriteLine("Now Printing the parsed text:");
             Console.WriteLine(TreatedText);
             Console.WriteLine();
-
+            //test
 
             //Placeholdercode to allow PDF to be converted to txt
             _myFileType = ".txt";
@@ -203,7 +207,7 @@ namespace PigLatinTextParser
                 //Check if a file alreaddy exists with this name.
                 if (File.Exists(_outputPath + _fileName))
                 {//if it does, we need to edit the name of the new output file by adding a timestamp to make it unique.
-                    _fileName = _fileName.Replace(_myFileType, $"{DateTime.Now.Ticks}" + _myFileType);
+                    _fileName = _fileName.Replace(_myFileType, $"-{DateTime.Now.Ticks}" + _myFileType);
                 }
                  File.WriteAllText(_outputPath+_fileName, TreatedText);
             }
