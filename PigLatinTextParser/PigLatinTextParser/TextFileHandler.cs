@@ -31,6 +31,8 @@ namespace PigLatinTextParser
 
         public void ProcessInputFiles()
         {
+
+            //Oceans of ".Parents" to reverse out of /bin/debug, where it defaults to for some reason. 
             string myPath = new DirectoryInfo(Directory.GetCurrentDirectory()).Parent.Parent.Parent.FullName+@"\InputText";
             Console.WriteLine("processing all files in: " + myPath);
             string[] files = Directory.GetFiles(myPath);
@@ -161,7 +163,6 @@ namespace PigLatinTextParser
 
         public void WritePigLatinFile(string filePath) 
         {
-            //oceans of .Parents to back up  because it seems to defeault to /bin/debug for some reason. C:\Users\SA02- Frederik\Documents\Case05PigLatin\PigLatinTextParser\PigLatinTextParser\InputText
             string fullPath = filePath;
             Console.WriteLine("path to intput is: "+fullPath);
             RawTextArray = readFile(fullPath);
@@ -222,6 +223,8 @@ namespace PigLatinTextParser
             if (_myFileType == ".txt")
             {
                 Console.WriteLine("Printing output to TXT file");
+
+
                 //Check if a file alreaddy exists with this name.
                 //if (File.Exists(fullPath))
                 //{//if it does, we need to edit the name of the new output file by adding a timestamp to make it unique.
@@ -232,6 +235,8 @@ namespace PigLatinTextParser
                 //    newFileName = _fileName;
                 //}
                 //fullPath = fullPath.Replace(_fileName, newFileName);
+
+
                 File.WriteAllText(fullPath, TreatedText);
             }
             //clean up
