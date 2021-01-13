@@ -13,7 +13,7 @@ using Page = UglyToad.PdfPig.Content.Page;
 namespace PigLatinTextParser
 {
     class TextFileHandler
-    { const string _outputPath = @"C:\Users\SA02- Frederik\Documents\Case05PigLatin\PigLatinTextParser\PigLatinTextParser\OutputText\OutputText";
+    { const string _outputPath = @"C:\Users\SA02- Frederik\Documents\Case05PigLatin\PigLatinTextParser\PigLatinTextParser\OutputText\";
         TextParser myParser = new TextParser();
 
         #region General Properties
@@ -21,10 +21,10 @@ namespace PigLatinTextParser
         private string[] TreatedTextArray = new string[] { "" };
         private string TreatedText;
         private string _myFileType = "";
+        private string _fileName = "";
         #endregion
 
         #region PDF layout properties
-        PdfDocument pigLatinPDF;
         PdfDocumentBuilder builder = new PdfDocumentBuilder();
 
         #endregion
@@ -90,6 +90,9 @@ namespace PigLatinTextParser
                    //pigLatinPDF.GetPage(page) readPDFLayout(myPage, document.NumberOfPages);
                     #endregion
                 }
+                //Placeholder
+                _fileName = _fileName.Replace(".pdf", ".txt");
+                //end Placeholder
                 return ret;
             }
             
@@ -118,7 +121,8 @@ namespace PigLatinTextParser
             string[] ret = new string[] { "" };
             
            _myFileType = Path.GetExtension(path);
-            Console.WriteLine("File has the extension: " + _myFileType);
+            _fileName = Path.GetFileName(path);
+            Console.WriteLine("File is called "+_fileName+ ", and has the extension: " + _myFileType);
 
             if (_myFileType==".txt") 
             {
@@ -184,6 +188,7 @@ namespace PigLatinTextParser
 
             //Placeholdercode to allow PDF to be converted to txt
             _myFileType = ".txt";
+            Console.WriteLine("printing "+_fileName+" to .txt file");
             ///end placeholder
 
             //Todo: make PDF writing functionality
@@ -195,7 +200,7 @@ namespace PigLatinTextParser
             if (_myFileType == ".txt")
             {
                 Console.WriteLine("Printing output to TXT file");
-                 File.WriteAllText(_outputPath+_myFileType, TreatedText);
+                 File.WriteAllText(_outputPath+_fileName, TreatedText);
             }
             //clean up
             TreatedText = "";
