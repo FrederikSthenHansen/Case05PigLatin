@@ -135,6 +135,8 @@ namespace PigLatinTextParser
             string[] ret = formatOddFileLayout(totalText);
             return ret;
         }
+
+        //Todo: Install AODL and implement the commented code
         private string[] readODT(string path)
         {
             //var sb = new StringBuilder();
@@ -157,6 +159,7 @@ namespace PigLatinTextParser
             //}
 
 
+            //replace with odt text readout
             string[] ret = new string[] { "" };
             return ret;
         }
