@@ -41,6 +41,8 @@ namespace PigLatinTextParser
             foreach (string file in files)
             {
                 WritePigLatinFile(file);
+                Console.WriteLine("Parsing of file complete: Press any key to continue parsing the next file.");
+                Console.ReadKey();
             }
 
         }
@@ -194,15 +196,16 @@ namespace PigLatinTextParser
         public void WritePigLatinFile(string filePath) 
         {
             string fullPath = filePath;
+            Console.WriteLine();
             Console.WriteLine("path to intput is: "+fullPath);
             RawTextArray = readFile(fullPath);
             //int linetracker=0;
             //First we take in the string array (bunch of text lines) from readfiles
             Console.WriteLine();
-            Console.WriteLine("Printing the text as read raw from the input file:");
+            //Console.WriteLine("Printing the text as read raw from the input file:");
             foreach (string line in RawTextArray)
             {
-                Console.WriteLine(line);
+                //Console.WriteLine(line);
                 //Strings are broken down into individual words
                 string[] words = myParser.BreakUpText(line);
 
@@ -226,10 +229,10 @@ namespace PigLatinTextParser
                 
             }
             //the finished text is printed to console and written to outputFolder:
-            Console.WriteLine();
-            Console.WriteLine("Now Printing the parsed text:");
-            Console.WriteLine(TreatedText);
-            Console.WriteLine();
+            //Console.WriteLine();
+            //Console.WriteLine("Now Printing the parsed text:");
+            //Console.WriteLine(TreatedText);
+            //Console.WriteLine();
 
             #region Placeholdercode to allow PDF to be converted to txt
 
@@ -238,8 +241,8 @@ namespace PigLatinTextParser
 
             #endregion
 
+            fullPath = filePath.Replace(@"\InputText\", @"\OutputText\");
 
-            fullPath = filePath.Replace(@"\InputText\", @"\OutputText\");//new DirectoryInfo(filePath).Parent.Parent.Parent.Parent.FullName + @"\OutputText\" + _fileName;
             #region more pdf/docx to txt placeholder code
             _fileName = _fileName.Replace(".pdf", _myFileType);
             _fileName = _fileName.Replace(".docx", _myFileType);
@@ -247,7 +250,11 @@ namespace PigLatinTextParser
             fullPath = fullPath.Replace(".docx", _myFileType);
             #endregion
 
+            #region Make the file unique to prevent overwriting previous files in folder
             string newFileName ="";
+            newFileName = makeFileUnique(fullPath);
+            fullPath = fullPath.Replace(_fileName, newFileName);
+            #endregion
 
             if (_myFileType == ".pdf")
             {
@@ -257,11 +264,6 @@ namespace PigLatinTextParser
             if (_myFileType == ".txt")
             {
                 Console.WriteLine("Printing output to TXT file");
-
-               newFileName = makeFileUnique(fullPath);
-
-                fullPath = fullPath.Replace(_fileName, newFileName);
-
                 File.WriteAllText(fullPath, TreatedText);
             }
             //clean up
@@ -275,9 +277,6 @@ namespace PigLatinTextParser
 
     }
 }
-
-//foreach (string file in files)
-//{public string[] MyLines = System.IO.File.ReadAllLines(file); } 
     
 
 
