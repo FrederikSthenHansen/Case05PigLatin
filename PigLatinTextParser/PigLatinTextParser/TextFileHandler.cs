@@ -6,9 +6,10 @@ using UglyToad.PdfPig.Content;
 using UglyToad.PdfPig.Core;
 using UglyToad.PdfPig.Fonts.Standard14Fonts;
 using UglyToad.PdfPig.Writer;
-using Microsoft.Office.Interop.Word;
-//using Microsoft.PowerBI.Api.Models;
 using Page = UglyToad.PdfPig.Content.Page;
+using PageSize=UglyToad.PdfPig.Content.PageSize;
+using DocumentFormat.OpenXml.Packaging;
+using DocumentFormat.OpenXml.Wordprocessing;
 
 namespace PigLatinTextParser
 {
@@ -78,6 +79,16 @@ namespace PigLatinTextParser
             File.WriteAllBytes(_outputPath+_myFileType, documentBytes);
         }
 
+        private string[] formatOddFileLayout( string inputText)
+        {
+            string[] ret = inputText.Split(". ");
+            for (int line = 0; line < ret.Length; line++)
+            {
+                ret[line] = ret[line] + ".";
+            }
+            return ret;
+        }
+
         private string[] readPDF(string path)
         {
             
@@ -91,13 +102,9 @@ namespace PigLatinTextParser
                     string pageText = myPage.Text;
                     pageText= pageText.TrimStart();
                     pageText = pageText.TrimEnd();
-                    
+
                     //layout edits
-                    ret = pageText.Split(". ");
-                    for (int line = 0; line < ret.Length; line++)
-                    {
-                        ret[line]=ret[line]+".";
-                    }
+                    ret = formatOddFileLayout(pageText);
                     #endregion
 
                     #region Reading Letters for layout purposes
@@ -109,6 +116,18 @@ namespace PigLatinTextParser
                 return ret;
             }
             
+        }
+
+        private string[] readDocx(string path)
+        {
+            string totalText = "";
+            using (WordprocessingDocument wordDoc = WordprocessingDocument.Open(path, true))
+            {
+                DocumentFormat.OpenXml.Wordprocessing.Body body = wordDoc.MainDocumentPart.Document.Body;
+                totalText = body.InnerText;   
+            }
+            string[] ret = formatOddFileLayout(totalText);
+            return ret;
         }
 
          private async System.Threading.Tasks.Task readPDFLayout(Page input, int pageCount)
@@ -148,17 +167,28 @@ namespace PigLatinTextParser
             }
             else if (_myFileType == ".docx")
             {
-                //Microsoft.Office.Interop.Word.Application app = new Microsoft.Office.Interop.Word.Application();
-                //Console.WriteLine(app.Path);
-                //Document doc = app.Documents.Open(path);
-
-                //ret = doc.Content.Text.Split(".");
-                //for (int line = 0; line < ret.Length; line++)
-                //{
-                //    ret[line] = ret[line] + ".";
-                //}
+                ret = readDocx(path);
+            }
+            else
+            {
+                Console.WriteLine("input file format "+_myFileType+" cannot be supported. Please only put valid text files in the input folder.");
             }
             return ret;
+        }
+
+        private string makeFileUnique(string path)
+        {
+            string newFileName = "";
+            //Check if a file alreaddy exists with this name.
+            if (File.Exists(path))
+            {//if it does, we need to edit the name of the new output file by adding a timestamp to make it unique.
+                newFileName = _fileName.Replace(_myFileType, $"-{DateTime.Now.Ticks}" + _myFileType);
+            }
+            else
+            {
+                newFileName = _fileName;
+            }
+            return newFileName;
         }
 
         public void WritePigLatinFile(string filePath) 
@@ -210,10 +240,14 @@ namespace PigLatinTextParser
 
 
             fullPath = filePath.Replace(@"\InputText\", @"\OutputText\");//new DirectoryInfo(filePath).Parent.Parent.Parent.Parent.FullName + @"\OutputText\" + _fileName;
-            #region more pdf placeholder code
+            #region more pdf/docx to txt placeholder code
+            _fileName = _fileName.Replace(".pdf", _myFileType);
+            _fileName = _fileName.Replace(".docx", _myFileType);
             fullPath = fullPath.Replace(".pdf", _myFileType);
+            fullPath = fullPath.Replace(".docx", _myFileType);
             #endregion
-            string newFileName = "";
+
+            string newFileName ="";
 
             if (_myFileType == ".pdf")
             {
@@ -224,18 +258,9 @@ namespace PigLatinTextParser
             {
                 Console.WriteLine("Printing output to TXT file");
 
+               newFileName = makeFileUnique(fullPath);
 
-                //Check if a file alreaddy exists with this name.
-                //if (File.Exists(fullPath))
-                //{//if it does, we need to edit the name of the new output file by adding a timestamp to make it unique.
-                //    newFileName = _fileName.Replace(_myFileType, $"-{DateTime.Now.Ticks}" + _myFileType);
-                //}
-                //else
-                //{
-                //    newFileName = _fileName;
-                //}
-                //fullPath = fullPath.Replace(_fileName, newFileName);
-
+                fullPath = fullPath.Replace(_fileName, newFileName);
 
                 File.WriteAllText(fullPath, TreatedText);
             }
@@ -246,6 +271,8 @@ namespace PigLatinTextParser
             _fileName = "";
             _myFileType = "";
         }
+
+
     }
 }
 

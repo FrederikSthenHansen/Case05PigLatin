@@ -11,8 +11,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.Office.Interop.Word" Version="15.0.4797.1003" />
-    <PackageReference Include="Microsoft.PowerBI.Api" Version="3.20.1" />
+    <PackageReference Include="DocumentFormat.OpenXml" Version="2.12.1" />
     <PackageReference Include="PdfPig" Version="0.1.4" />
   </ItemGroup>
 
