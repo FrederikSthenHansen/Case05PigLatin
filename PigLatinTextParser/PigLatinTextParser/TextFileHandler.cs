@@ -161,6 +161,9 @@ namespace PigLatinTextParser
             _fileName = Path.GetFileName(path);
             Console.WriteLine("File is called "+_fileName+ ", and has the extension: " + _myFileType);
 
+            //reset _fileisvalid
+            _fileIsValid = true;
+
             if (_myFileType==".txt") 
             {
                 ret = readTXT(path);
