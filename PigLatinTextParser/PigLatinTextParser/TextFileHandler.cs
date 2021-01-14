@@ -23,6 +23,7 @@ namespace PigLatinTextParser
         private string TreatedText;
         private string _myFileType = "";
         private string _fileName = "";
+        private bool _fileIsValid = true;
         #endregion
 
         #region PDF layout properties
@@ -37,10 +38,11 @@ namespace PigLatinTextParser
             string myPath = new DirectoryInfo(Directory.GetCurrentDirectory()).Parent.Parent.Parent.FullName+@"\InputText";
             Console.WriteLine("processing all files in: " + myPath);
             string[] files = Directory.GetFiles(myPath);
-            
+            int filenr = 0;
             foreach (string file in files)
             {
-                WritePigLatinFile(file);
+                filenr++;
+                WritePigLatinFile(file, filenr, files.Length);
                 Console.WriteLine("Parsing of file complete: Press any key to continue parsing the next file.");
                 Console.ReadKey();
             }
@@ -149,7 +151,7 @@ namespace PigLatinTextParser
             return ret;
         }
 
-        //Needs Refactoring to accept docx format and other formats
+        
         private string[] readFile(string path)
         {
 
@@ -174,6 +176,7 @@ namespace PigLatinTextParser
             else
             {
                 Console.WriteLine("input file format "+_myFileType+" cannot be supported. Please only put valid text files in the input folder.");
+                _fileIsValid = false;
             }
             return ret;
         }
@@ -193,78 +196,83 @@ namespace PigLatinTextParser
             return newFileName;
         }
 
-        public void WritePigLatinFile(string filePath) 
+        public void WritePigLatinFile(string filePath, int counter, int total) 
         {
             string fullPath = filePath;
             Console.WriteLine();
-            Console.WriteLine("path to intput is: "+fullPath);
+            Console.WriteLine("path to intput number: " + counter + "/" + total + " is: "+fullPath);
             RawTextArray = readFile(fullPath);
             //int linetracker=0;
             //First we take in the string array (bunch of text lines) from readfiles
             Console.WriteLine();
             //Console.WriteLine("Printing the text as read raw from the input file:");
-            foreach (string line in RawTextArray)
+
+            if (_fileIsValid == true)
             {
-                //Console.WriteLine(line);
-                //Strings are broken down into individual words
-                string[] words = myParser.BreakUpText(line);
+                Console.WriteLine("Parsing Inputtext to PigLatin...");
+                foreach (string line in RawTextArray)
+                {
+                    //Console.WriteLine(line);
+                    //Strings are broken down into individual words
+                    string[] words = myParser.BreakUpText(line);
 
-                TreatedTextArray = new string[words.Length];
+                    TreatedTextArray = new string[words.Length];
 
-                for (int w=0;w<words.Length; w++ )
-                {   //All words in each line are turned to Pig latin.
-                    words[w] = myParser.MakePigLatinWord(words[w]);
-                    
-                    //write to console
-                    //Console.WriteLine(words[w]);
-                    
-                    //each line is reconstruced word by word
-                    TreatedTextArray[w] = myParser.RebuildTextLine(words[w]);
+                    for (int w = 0; w < words.Length; w++)
+                    {   //All words in each line are turned to Pig latin.
+                        words[w] = myParser.MakePigLatinWord(words[w]);
+
+                        //write to console
+                        //Console.WriteLine(words[w]);
+
+                        //each line is reconstruced word by word
+                        TreatedTextArray[w] = myParser.RebuildTextLine(words[w]);
+                    }
+
+
+                    //Then all lines are added back together to reform the text.
+                    TreatedText = TreatedText + myParser.RebuildWholeText(TreatedTextArray);
+
+
                 }
+                //the finished text is printed to console and written to outputFolder:
+                //Console.WriteLine();
+                //Console.WriteLine("Now Printing the parsed text:");
+                //Console.WriteLine(TreatedText);
+                //Console.WriteLine();
 
-                
-                //Then all lines are added back together to reform the text.
-                TreatedText = TreatedText+ myParser.RebuildWholeText(TreatedTextArray);
-               
-                
-            }
-            //the finished text is printed to console and written to outputFolder:
-            //Console.WriteLine();
-            //Console.WriteLine("Now Printing the parsed text:");
-            //Console.WriteLine(TreatedText);
-            //Console.WriteLine();
+                #region Placeholdercode to allow PDF to be converted to txt
 
-            #region Placeholdercode to allow PDF to be converted to txt
+                Console.WriteLine("printing " + _fileName + " to .txt file");
+                _myFileType = ".txt";
 
-            Console.WriteLine("printing "+_fileName+" to .txt file");
-            _myFileType = ".txt";
+                #endregion
 
-            #endregion
+                fullPath = filePath.Replace(@"\InputText\", @"\OutputText\");
 
-            fullPath = filePath.Replace(@"\InputText\", @"\OutputText\");
+                #region more pdf/docx to txt placeholder code
+                _fileName = _fileName.Replace(".pdf", _myFileType);
+                _fileName = _fileName.Replace(".docx", _myFileType);
+                fullPath = fullPath.Replace(".pdf", _myFileType);
+                fullPath = fullPath.Replace(".docx", _myFileType);
+                #endregion
 
-            #region more pdf/docx to txt placeholder code
-            _fileName = _fileName.Replace(".pdf", _myFileType);
-            _fileName = _fileName.Replace(".docx", _myFileType);
-            fullPath = fullPath.Replace(".pdf", _myFileType);
-            fullPath = fullPath.Replace(".docx", _myFileType);
-            #endregion
+                #region Make the file unique to prevent overwriting previous files in folder
+                string newFileName = "";
+                newFileName = makeFileUnique(fullPath);
+                fullPath = fullPath.Replace(_fileName, newFileName);
+                #endregion
 
-            #region Make the file unique to prevent overwriting previous files in folder
-            string newFileName ="";
-            newFileName = makeFileUnique(fullPath);
-            fullPath = fullPath.Replace(_fileName, newFileName);
-            #endregion
-
-            if (_myFileType == ".pdf")
-            {
-                Console.WriteLine("Printing output to PDF file");
-                writePDFOutput();
-            }
-            if (_myFileType == ".txt")
-            {
-                Console.WriteLine("Printing output to TXT file");
-                File.WriteAllText(fullPath, TreatedText);
+                if (_myFileType == ".pdf")
+                {
+                    Console.WriteLine("Printing output to PDF file");
+                    writePDFOutput();
+                }
+                if (_myFileType == ".txt")
+                {
+                    Console.WriteLine("Printing output to TXT file");
+                    File.WriteAllText(fullPath, TreatedText);
+                }
             }
             //clean up
             TreatedText = "";
