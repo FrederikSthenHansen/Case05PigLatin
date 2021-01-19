@@ -10,8 +10,11 @@ using Page = UglyToad.PdfPig.Content.Page;
 using PageSize=UglyToad.PdfPig.Content.PageSize;
 using DocumentFormat.OpenXml.Packaging;
 using DocumentFormat.OpenXml.Wordprocessing;
-//using AODL.Document.TextDocuments;
-//using AODL.Document.Content;
+using AODL.Document.TextDocuments;
+using AODL.Document.Content;
+using System.Xml.Linq;
+using System.Linq;
+using System.Text;
 
 namespace PigLatinTextParser
 {
@@ -136,41 +139,35 @@ namespace PigLatinTextParser
             return ret;
         }
 
-        //Todo: Install AODL and implement the commented code
+       
         private string[] readODT(string path)
         {
-            //var sb = new StringBuilder();
-            //using (var doc = new TextDocument())
-            //{
-            //    doc.Load(path);
+            var sb = new StringBuilder();
+            using (var doc = new TextDocument())
+            {
+                doc.Load(path);
 
-            //    //The header and footer are in the DocumentStyles part. Grab the XML of this part
-            //    XElement stylesPart = XElement.Parse(doc.DocumentStyles.Styles.OuterXml);
-            //    //Take all headers and footers text, concatenated with return carriage
-            //    string stylesText = string.Join("\r\n", stylesPart.Descendants().Where(x => x.Name.LocalName == "header" || x.Name.LocalName == "footer").Select(y => y.Value));
+                //The header and footer are in the DocumentStyles part. Grab the XML of this part
+                XElement stylesPart = XElement.Parse(doc.DocumentStyles.Styles.OuterXml);
+                //Take all headers and footers text, concatenated with return carriage
+                string stylesText = string.Join("\r\n", stylesPart.Descendants().Where(x => x.Name.LocalName == "header" || x.Name.LocalName == "footer").Select(y => y.Value));
 
-            //    //Main content
-            //    var mainPart = doc.Content.Cast<IContent>();
-            //    var mainText = String.Join("\r\n", mainPart.Select(x => x.Node.InnerText));
+                //Main content
+                var mainPart = doc.Content.Cast<IContent>();
+                var mainText = String.Join("\r\n", mainPart.Select(x => x.Node.InnerText));
 
-            //    //Append both text variables
-            //    sb.Append(stylesText + "\r\n");
-            //    sb.Append(mainText);
-            //}
-
+                //Append both text variables
+                sb.Append(stylesText + "\r\n");
+                sb.Append(mainText);
+            }
+            string fullText = sb.ToString();
 
             //replace with odt text readout
-            string[] ret = new string[] { "" };
+            string[] ret = formatOddFileLayout(fullText);
             return ret;
         }
 
-        private async System.Threading.Tasks.Task readPDFLayout(Page input, int pageCount)
-        {
-            foreach(Letter letter in input.Letters)
-            {
-              //  await { }
-            }
-        }
+        
 
         private string[] readTXT(string path)
         {
@@ -290,8 +287,11 @@ namespace PigLatinTextParser
                 #region more pdf/docx to txt placeholder code
                 _fileName = _fileName.Replace(".pdf", _myFileType);
                 _fileName = _fileName.Replace(".docx", _myFileType);
+                _fileName = _fileName.Replace(".odt", _myFileType);
                 fullPath = fullPath.Replace(".pdf", _myFileType);
                 fullPath = fullPath.Replace(".docx", _myFileType);
+                fullPath = fullPath.Replace(".odt", _myFileType);
+
                 #endregion
 
                 #region Make the file unique to prevent overwriting previous files in folder
