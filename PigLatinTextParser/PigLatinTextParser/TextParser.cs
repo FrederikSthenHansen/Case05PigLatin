@@ -25,13 +25,63 @@ namespace PigLatinTextParser
             return "bcdfghjklmnprstvxz".IndexOf(input.ToString(), StringComparison.InvariantCultureIgnoreCase) >= 0; ;
         }
 
+        private int getNestedArrayTotalLenght(string[][] input)
+        { int ret=0;
+            foreach (string[] array in input)
+            {
+                ret = ret + array.Length;
+            }
+            return ret;
+        }
+
         public string[] BreakUpText(string inputtext)
         {
-            string[] array = new string[] { "" };
+            string[] arraySpace = new string[] { "" };
+            string[] ret= new string[] { "" };
+
+
             if (inputtext != null)
-            { array = inputtext.Split(' '); }
+            {   
+                //Simple breakup of sentence by spaces
+                arraySpace = inputtext.Split(' ');
+
+                //Further breakup of sentence by CRLF
+                string[][] arrayCRLF = new string[arraySpace.Length][];
+                for (int x=0; x< arraySpace.Length;x++)
+                {
+                    string divideByUppercase = @"(?=\p{Lu}\p{Ll})|(?<=\p{Ll})(?=\p{Lu})";
+                    //further divide the split textfuther to avoid words clustering becasue CRLF were lost when reading the text
+                    arrayCRLF[x] = Regex.Split(arraySpace[x], divideByUppercase, RegexOptions.Compiled); 
+                }
+
+                //Make the return array big enough to house this alll the contenct of the nested array.
+                 ret = new string[getNestedArrayTotalLenght(arrayCRLF)];
+
+
+                //input all values from the nested array into "ret"
+                int arr1 = 0;
+                int arr2 = 0;
+                for (int r=0; r < ret.Length; r++)
+                {
+                    try 
+                    {
+                        ret[r] = arrayCRLF[arr2][arr1];
+                    }
+                    catch(IndexOutOfRangeException) 
+                    {
+                        //if arr1 is out of index we reset it to 0 (-1 because arr1 increases by 1 after this operation).
+                        // also we increase r2 to move onto the next array
+                        r--;
+                        arr1=-1;
+                        arr2++;
+                    }
+
+                    arr1++;
+                }
+            }
             
-            return array;
+            
+            return ret;
         }
 
         public string RebuildWholeText(string[] inputArray)

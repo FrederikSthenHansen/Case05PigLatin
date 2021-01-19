@@ -88,6 +88,7 @@ namespace PigLatinTextParser
             File.WriteAllBytes(_outputPath+_myFileType, documentBytes);
         }
 
+        //TODO: improve this method to make its output more readable for the the method acting after it.
         private string[] formatOddFileLayout( string inputText)
         {
             string[] ret = inputText.Split(". ");
@@ -148,16 +149,16 @@ namespace PigLatinTextParser
                 doc.Load(path);
 
                 //The header and footer are in the DocumentStyles part. Grab the XML of this part
-                XElement stylesPart = XElement.Parse(doc.DocumentStyles.Styles.OuterXml);
-                //Take all headers and footers text, concatenated with return carriage
-                string stylesText = string.Join("\r\n", stylesPart.Descendants().Where(x => x.Name.LocalName == "header" || x.Name.LocalName == "footer").Select(y => y.Value));
+                //XElement stylesPart = XElement.Parse(doc.DocumentStyles.Styles.OuterXml);
+                ////Take all headers and footers text, concatenated with return carriage
+                //string stylesText = string.Join("\r\n", stylesPart.Descendants().Where(x => x.Name.LocalName == "header" || x.Name.LocalName == "footer").Select(y => y.Value));
 
                 //Main content
                 var mainPart = doc.Content.Cast<IContent>();
                 var mainText = String.Join("\r\n", mainPart.Select(x => x.Node.InnerText));
 
                 //Append both text variables
-                sb.Append(stylesText + "\r\n");
+               // sb.Append(stylesText + "\r\n");
                 sb.Append(mainText);
             }
             string fullText = sb.ToString();
