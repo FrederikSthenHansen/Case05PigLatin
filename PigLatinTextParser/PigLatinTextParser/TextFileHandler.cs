@@ -91,9 +91,16 @@ namespace PigLatinTextParser
         //TODO: improve this method to make its output more readable for the the method acting after it.
         private string[] formatOddFileLayout( string inputText)
         {
-            string[] ret = inputText.Split(". ");
+            
+            string lineChange = ". /r/n ";
+            //inputText = inputText.Replace(". ", lineChange);
+
+            //split text on every "."
+            string[] ret = inputText.Split(".");
+
             for (int line = 0; line < ret.Length; line++)
             {
+                //readd "." and force a CRLF
                 ret[line] = ret[line] + ".";
             }
             return ret;
@@ -148,17 +155,12 @@ namespace PigLatinTextParser
             {
                 doc.Load(path);
 
-                //The header and footer are in the DocumentStyles part. Grab the XML of this part
-                //XElement stylesPart = XElement.Parse(doc.DocumentStyles.Styles.OuterXml);
-                ////Take all headers and footers text, concatenated with return carriage
-                //string stylesText = string.Join("\r\n", stylesPart.Descendants().Where(x => x.Name.LocalName == "header" || x.Name.LocalName == "footer").Select(y => y.Value));
-
                 //Main content
                 var mainPart = doc.Content.Cast<IContent>();
                 var mainText = String.Join("\r\n", mainPart.Select(x => x.Node.InnerText));
 
-                //Append both text variables
-               // sb.Append(stylesText + "\r\n");
+               //Append both text variables
+              
                 sb.Append(mainText);
             }
             string fullText = sb.ToString();
@@ -210,7 +212,8 @@ namespace PigLatinTextParser
             }
             else
             {
-                Console.WriteLine("input file format "+_myFileType+" cannot be supported. Please only put valid text files in the input folder.");
+                Console.WriteLine("input file format "+_myFileType+" is not supported. Please only put valid text files in the input folder");
+                Console.WriteLine("Currenly supported file formats are: .txt, .pdf, .odt and .docx ");
                 _fileIsValid = false;
             }
             return ret;

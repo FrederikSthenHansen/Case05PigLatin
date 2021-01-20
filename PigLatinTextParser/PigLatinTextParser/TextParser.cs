@@ -34,7 +34,7 @@ namespace PigLatinTextParser
             return ret;
         }
 
-        public string[] BreakUpText(string inputtext)
+        public string[] BreakUpText(string inputtext) 
         {
             string[] arraySpace = new string[] { "" };
             string[] ret= new string[] { "" };
@@ -49,12 +49,22 @@ namespace PigLatinTextParser
                 string[][] arrayCRLF = new string[arraySpace.Length][];
                 for (int x=0; x< arraySpace.Length;x++)
                 {
-                    string divideByUppercase = @"(?=\p{Lu}\p{Ll})|(?<=\p{Ll})(?=\p{Lu})";
-                    //further divide the split textfuther to avoid words clustering becasue CRLF were lost when reading the text
-                    arrayCRLF[x] = Regex.Split(arraySpace[x], divideByUppercase, RegexOptions.Compiled); 
+                    //regex to check if the an uppercase letter is sorrounded by lowercase letters. this one is unicode compliant.
+                    string divideByUppercase = @"(?=\p{Lu}\p{Ll})|(?<=\p{Ll})(?=\p{Lu})"; 
+
+                    //further divide the split textfuther to avoid words clustering becasue CRLF were lost when reading the text 
+                    //from the input files.
+                    arrayCRLF[x] = Regex.Split(arraySpace[x], divideByUppercase, RegexOptions.Compiled);
+
+                    //force line changes in ouput
+                    //for (int y=0; y < arrayCRLF[x].Length; y++)
+                    //{
+                    //    arrayCRLF[x][y] = arrayCRLF[x][y] + " /r/n";
+                    //}
+                    
                 }
 
-                //Make the return array big enough to house this alll the contenct of the nested array.
+                //Make the return-array big enough to house  all the content of the nested array.
                  ret = new string[getNestedArrayTotalLenght(arrayCRLF)];
 
 
