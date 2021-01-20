@@ -92,7 +92,7 @@ namespace PigLatinTextParser
         private string[] formatOddFileLayout( string inputText)
         {
             
-            string lineChange = ". /r/n ";
+           // string lineChange = ". /r/n ";
             //inputText = inputText.Replace(". ", lineChange);
 
             //split text on every "."
@@ -100,7 +100,6 @@ namespace PigLatinTextParser
 
             for (int line = 0; line < ret.Length; line++)
             {
-                //readd "." and force a CRLF
                 ret[line] = ret[line] + ".";
             }
             return ret;
@@ -187,9 +186,8 @@ namespace PigLatinTextParser
 
             string[] ret = new string[] { "" };
             
-           _myFileType = Path.GetExtension(path);
-            _fileName = Path.GetFileName(path);
-            Console.WriteLine("File is called "+_fileName+ ", and has the extension: " + _myFileType);
+           
+            //Console.WriteLine("File is called "+_fileName+ ", and has the extension: " + _myFileType);
 
             //reset _fileisvalid
             _fileIsValid = true;
@@ -238,7 +236,10 @@ namespace PigLatinTextParser
         {
             string fullPath = filePath;
             Console.WriteLine();
-            Console.WriteLine("path to intput number: " + counter + "/" + total + " is: "+fullPath);
+            _myFileType = Path.GetExtension(filePath);
+            _fileName = Path.GetFileName(filePath);
+            Console.WriteLine("Currently processing: "+_fileName);
+            //Console.WriteLine("path to intput number: " + counter + "/" + total + " is: "+fullPath);
             RawTextArray = readFile(fullPath);
             //int linetracker=0;
             //First we take in the string array (bunch of text lines) from readfiles
@@ -247,7 +248,7 @@ namespace PigLatinTextParser
 
             if (_fileIsValid == true)
             {
-                Console.WriteLine("Parsing Inputtext to PigLatin...");
+                Console.WriteLine($"Parsing {_fileName} to PigLatin...");
                 foreach (string line in RawTextArray)
                 {
                     //Console.WriteLine(line);
@@ -279,16 +280,16 @@ namespace PigLatinTextParser
                 //Console.WriteLine(TreatedText);
                 //Console.WriteLine();
 
-                #region Placeholdercode to allow PDF to be converted to txt
+                #region Placeholder code to allow PDF to be converted to txt
 
                 Console.WriteLine("printing " + _fileName + " to .txt file");
                 _myFileType = ".txt";
 
-                #endregion
+                
 
                 fullPath = filePath.Replace(@"\InputText\", @"\OutputText\");
 
-                #region more pdf/docx to txt placeholder code
+                
                 _fileName = _fileName.Replace(".pdf", _myFileType);
                 _fileName = _fileName.Replace(".docx", _myFileType);
                 _fileName = _fileName.Replace(".odt", _myFileType);
@@ -327,15 +328,3 @@ namespace PigLatinTextParser
     }
 }
     
-
-
-            
-
-
-
-     
-      
-
-       
-    
-
