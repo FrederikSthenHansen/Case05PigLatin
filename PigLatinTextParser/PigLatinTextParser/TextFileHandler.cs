@@ -36,6 +36,10 @@ namespace PigLatinTextParser
 
         #endregion
 
+        #region ODT specific properties
+        //TextDocument doc = new TextDocument();
+        #endregion
+
         public void ProcessInputFiles()
         {
 
@@ -149,23 +153,42 @@ namespace PigLatinTextParser
        
         private string[] readODT(string path)
         {
+            string[] ret= new string[] {""};
+            
             var sb = new StringBuilder();
+
+
             using (var doc = new TextDocument())
             {
-                doc.Load(path);
+                //this operation causes a crash when parsing 2 or more odt files in parralel
 
-                //Main content
-                var mainPart = doc.Content.Cast<IContent>();
-                var mainText = String.Join("\r\n", mainPart.Select(x => x.Node.InnerText));
+                try
+                {
+                    doc.Load(path);
 
-               //Append both text variables
-              
-                sb.Append(mainText);
+                    //Main content
+                    var mainPart = doc.Content.Cast<IContent>();
+                    var mainText = String.Join("\r\n", mainPart.Select(x => x.Node.InnerText));
+
+                    //Append both text variables
+
+                    sb.Append(mainText);
+                    //}
+                    string fullText = sb.ToString();
+                    ret = formatOddFileLayout(fullText);
+                }
+                catch (System.IO.IOException)
+                {
+                    //wait 2 sec and try again
+                    System.Threading.Thread.Sleep(2000);
+                    readODT(path);
+                }
             }
-            string fullText = sb.ToString();
-
-            //replace with odt text readout
-            string[] ret = formatOddFileLayout(fullText);
+                //replace with odt text readout
+                
+                
+            
+            
             return ret;
         }
 

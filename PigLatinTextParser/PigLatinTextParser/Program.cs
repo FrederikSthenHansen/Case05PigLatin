@@ -101,7 +101,7 @@ namespace PigLatinTextParser
                 {
                     Console.WriteLine($"Processing of {fileName} completed succesfully! Deleting it from the input folder..." );
                     Console.WriteLine("The parsed text File can be found in the 'OutputText' folder in this application.");
-                    
+                    Console.WriteLine();
                 }
                 else { Console.WriteLine($"Processing of {fileName} Failed, as the input file is invalid! Deleting it from the input folder... "); }
             }
@@ -110,6 +110,7 @@ namespace PigLatinTextParser
             {
                 WriteLine($"WARNING: {args.CacheItem.Key} was removed unexpectedly and may not be processed because {args.RemovedReason}");
                 Console.WriteLine("Please remove the file in question from the input folder");
+                Console.WriteLine();
             }
             File.Delete(args.CacheItem.Key);
         }
