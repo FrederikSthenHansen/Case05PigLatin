@@ -179,16 +179,14 @@ namespace PigLatinTextParser
                 }
                 catch (System.IO.IOException)
                 {
+                    Console.WriteLine(_fileName +" is waiting in que...");
                     //wait 2 sec and try again
                     System.Threading.Thread.Sleep(2000);
-                    readODT(path);
+                   ret= readODT(path);
                 }
             }
                 //replace with odt text readout
-                
-                
-            
-            
+              
             return ret;
         }
 
