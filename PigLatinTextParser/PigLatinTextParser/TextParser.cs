@@ -50,17 +50,20 @@ namespace PigLatinTextParser
                 for (int x=0; x< arraySpace.Length;x++)
                 {
                     //regex to check if the an uppercase letter is sorrounded by lowercase letters. this one is unicode compliant.
-                    string divideByUppercase = @"(?=\p{Lu}\p{Ll})|(?<=\p{Ll})(?=\p{Lu})"; 
+                    string divideByUppercase = @"(?=\p{Lu}\p{Ll})|(?<=\p{Ll})(?=\p{Lu})";
 
                     //further divide the split textfuther to avoid words clustering becasue CRLF were lost when reading the text 
                     //from the input files.
-                    arrayCRLF[x] = Regex.Split(arraySpace[x], divideByUppercase, RegexOptions.Compiled);
 
-                    //force line changes in ouput
-                    //for (int y=0; y < arrayCRLF[x].Length; y++)
-                    //{
-                    //    arrayCRLF[x][y] = arrayCRLF[x][y] + " /r/n";
-                    //}
+                    //make sure not to break up web-links:
+                    if (arraySpace[x].Contains("http")) { arrayCRLF[x]=new string[] { arraySpace[x] }; }
+
+                    else
+                    {
+                        arrayCRLF[x] = Regex.Split(arraySpace[x], divideByUppercase, RegexOptions.Compiled);
+                    }
+
+                  
                     
                 }
 
@@ -275,31 +278,34 @@ namespace PigLatinTextParser
             //Does the word start with a consonant?
             if (_consonants != "")
             {
-                if (firstLetterIsCapital == true)
+                //make sure this isn't a website before pink
+                if (!_consonants.Contains("http"))
                 {
-                    //if _firstWovelindex is not out of range, the word starts with a capitol letter
-                    if (_firstWovelIndex != 999)
+                    if (firstLetterIsCapital == true)
                     {
-                        //therefore the first Wovel needs to be turned capitol.
-                        charWord[_firstWovelIndex] = makeLetterCapital(inputWord[_firstWovelIndex]);
+                        //if _firstWovelindex is not out of range, the word starts with a capitol letter
+                        if (_firstWovelIndex != 999)
+                        {
+                            //therefore the first Wovel needs to be turned capitol.
+                            charWord[_firstWovelIndex] = makeLetterCapital(inputWord[_firstWovelIndex]);
+                        }
+
                     }
 
-                }
+                    //with all character alterations complete we have no more use for charWord
+                    //and as such we turn it back into to our string, overwriting the old content in the process.
+                    inputWord = new string(charWord);
+                    // remove punctuation, perform consonant pig-latin and re-add the punctuation
 
-                //with all character alterations complete we have no more use for charWord
-                //and as such we turn it back into to our string, overwriting the old content in the process.
-                inputWord = new string(charWord);
-                // remove punctuation, perform consonant pig-latin and re-add the punctuation
-                
-                inputWord = removeEndingPunctuation(inputWord, _lastletterIndex(charWord) + 1, _punctuation.Length);
-                inputWord = inputWord.Remove(_firstConsonantIndex, _consonants.Length);
-                inputWord = inputWord + _consonants + "ay" + _punctuation;
+                    inputWord = removeEndingPunctuation(inputWord, _lastletterIndex(charWord) + 1, _punctuation.Length);
+                    inputWord = inputWord.Remove(_firstConsonantIndex, _consonants.Length);
+                    inputWord = inputWord + _consonants + "ay" + _punctuation;
+                }
             }
 
             //Word has no starting consonants
-            else            {                
-
-
+            else
+            { 
                 //if there is no characters in the inputputword, we cannot run the code in else block,
                 //since that would index out of range
                 if (inputWord!="")

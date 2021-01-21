@@ -71,7 +71,7 @@ namespace PigLatinTextParser
             PdfPoint point = new PdfPoint(25, 700);
             //page.AddText(TreatedText, 12, point, font); 
             TreatedText = TreatedText.Replace(":", ".");
-            TreatedTextArray = TreatedText.Split(".");
+            TreatedTextArray = TreatedText.Split(". ");
 
             page.AddText($"This is a Placeholder! {TreatedTextArray[0]}  This is a placeholder.", 12, point, font);
             point.MoveY(14);
@@ -100,7 +100,7 @@ namespace PigLatinTextParser
             //inputText = inputText.Replace(". ", lineChange);
 
             //split text on every "."
-            string[] ret = inputText.Split(".");
+            string[] ret = inputText.Split(". ");
 
             for (int line = 0; line < ret.Length; line++)
             {
@@ -181,8 +181,9 @@ namespace PigLatinTextParser
                 {
                     Console.WriteLine(_fileName +" is waiting in que...");
                     //wait 2 sec and try again
-                    System.Threading.Thread.Sleep(2000);
-                   ret= readODT(path);
+                    System.Threading.Thread.Sleep(4000);
+                    /*try { */ret = readODT(path);/* }*/
+                    //catch (System.IO.IOException) { }
                 }
             }
                 //replace with odt text readout
