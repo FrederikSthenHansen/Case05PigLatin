@@ -13,7 +13,9 @@
   <ItemGroup>
     <PackageReference Include="AODL" Version="1.2.0.1" />
     <PackageReference Include="DocumentFormat.OpenXml" Version="2.12.1" />
+    <PackageReference Include="Microsoft.Extensions.Caching.Memory" Version="5.0.0" />
     <PackageReference Include="PdfPig" Version="0.1.4" />
+    <PackageReference Include="System.Runtime.Caching" Version="5.0.0" />
   </ItemGroup>
 
 </Project>

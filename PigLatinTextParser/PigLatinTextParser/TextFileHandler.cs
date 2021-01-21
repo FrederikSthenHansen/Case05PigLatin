@@ -232,8 +232,9 @@ namespace PigLatinTextParser
             return newFileName;
         }
 
-        public void WritePigLatinFile(string filePath, int counter, int total) 
+        public bool WritePigLatinFile(string filePath, int counter, int total) 
         {
+            
             string fullPath = filePath;
             Console.WriteLine();
             _myFileType = Path.GetExtension(filePath);
@@ -322,6 +323,10 @@ namespace PigLatinTextParser
             RawTextArray = new string[] { "" };
             _fileName = "";
             _myFileType = "";
+
+
+            //return bool to tell caller if the process was succesfull.
+            return _fileIsValid;
         }
 
 
