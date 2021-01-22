@@ -85,25 +85,33 @@ namespace PigLatinTextParser
 
             FilesToProcess.Add(item, policy);
         }
-
         private static void ProcessMyFile(CacheEntryRemovedArguments args)
         {
-            WriteLine($"* Cache item removed: {args.CacheItem.Key} because {args.RemovedReason}");
+            ProcessMyFileAsync(args);
+        }
 
+        private static async Task ProcessMyFileAsync(CacheEntryRemovedArguments args)
+        {
             string fileName = new DirectoryInfo(args.CacheItem.Key).Name;
+            WriteLine($"* Cache item removed: {fileName} because {args.RemovedReason}");
+
+            
   
             if (args.RemovedReason == CacheEntryRemovedReason.Expired)
             {
                 var fileProcessor = new TextFileHandler();
 
                 //call the parsing method and get a bool for succes or failure
-                if (fileProcessor.WritePigLatinFile(args.CacheItem.Key, 1, 1) == true) 
-                {
-                    Console.WriteLine($"Processing of {fileName} completed succesfully! Deleting it from the input folder..." );
-                    Console.WriteLine("The parsed text File can be found in the 'OutputText' folder in this application.");
-                    Console.WriteLine();
-                }
-                else { Console.WriteLine($"Processing of {fileName} Failed, as the input file is invalid! Deleting it from the input folder... "); }
+                bool mybool = await fileProcessor.WritePigLatinFile(args.CacheItem.Key, 1, 1);
+                    if (mybool == true)
+                    {
+                        Console.WriteLine($"Processing of {fileName} completed succesfully! Deleting it from the input folder...");
+                        Console.WriteLine("The parsed text File can be found in the 'OutputText' folder in this application.");
+                        Console.WriteLine();
+                    }
+                    else { Console.WriteLine($"Processing of {fileName} Failed, as the input file is invalid! Deleting it from the input folder... "); }
+                
+                
             }
         
             else

@@ -38,6 +38,7 @@ namespace PigLatinTextParser
 
         #region ODT specific properties
         //TextDocument doc = new TextDocument();
+        int loops = 0;
         #endregion
 
         public void ProcessInputFiles()
@@ -150,8 +151,9 @@ namespace PigLatinTextParser
             return ret;
         }
 
+
        
-        private string[] readODT(string path)
+        private async Task<string[]> readODT(string path)
         {
             string[] ret= new string[] {""};
             
@@ -179,10 +181,11 @@ namespace PigLatinTextParser
                 }
                 catch (System.IO.IOException)
                 {
-                    Console.WriteLine(_fileName +" is waiting in que...");
+                    loops++;
+                    Console.WriteLine(_fileName +" is waiting in que for the "+loops+" time...");
                     //wait 2 sec and try again
                     System.Threading.Thread.Sleep(4000);
-                    /*try { */ret = readODT(path);/* }*/
+                    /*try { */ret = Task.Run(()=> readODT(path)).Result;/* }*/
                     //catch (System.IO.IOException) { }
                 }
             }
@@ -203,14 +206,14 @@ namespace PigLatinTextParser
         }
 
         
-        private string[] readFile(string path)
+        private async Task<string[]> readFile(string path)
         {
 
             string[] ret = new string[] { "" };
-            
-           
-            //Console.WriteLine("File is called "+_fileName+ ", and has the extension: " + _myFileType);
 
+
+            //Console.WriteLine("File is called "+_fileName+ ", and has the extension: " + _myFileType);
+            Console.WriteLine("Now atttempting to read "+_fileName);
             //reset _fileisvalid
             _fileIsValid = true;
 
@@ -228,7 +231,7 @@ namespace PigLatinTextParser
             }
             else if (_myFileType == ".odt")
             {
-                ret = readODT(path);
+                ret = await readODT(path);
             }
             else
             {
@@ -254,7 +257,7 @@ namespace PigLatinTextParser
             return newFileName;
         }
 
-        public bool WritePigLatinFile(string filePath, int counter, int total) 
+        public async Task<bool> WritePigLatinFile(string filePath, int counter, int total) 
         {
             
             string fullPath = filePath;
@@ -263,7 +266,9 @@ namespace PigLatinTextParser
             _fileName = Path.GetFileName(filePath);
             Console.WriteLine("Currently processing: "+_fileName);
             //Console.WriteLine("path to intput number: " + counter + "/" + total + " is: "+fullPath);
-            RawTextArray = readFile(fullPath);
+            //Task<string[]>[] MyTasks = { readODT(filePath) };
+            //Task<string[]> middleman= 
+            RawTextArray = await readODT(filePath);
             //int linetracker=0;
             //First we take in the string array (bunch of text lines) from readfiles
             Console.WriteLine();
@@ -291,7 +296,7 @@ namespace PigLatinTextParser
                         TreatedTextArray[w] = myParser.RebuildTextLine(words[w]);
                     }
 
-
+                    Console.WriteLine("Rebuilding the text of " + _fileName); ;
                     //Then all lines are added back together to reform the text.
                     TreatedText = TreatedText + myParser.RebuildWholeText(TreatedTextArray);
 
@@ -335,7 +340,7 @@ namespace PigLatinTextParser
                 }
                 if (_myFileType == ".txt")
                 {
-                    Console.WriteLine("Printing output to TXT file");
+                    Console.WriteLine($"Printing the parsed {_fileName} to TXT file");
                     File.WriteAllText(fullPath, TreatedText);
                 }
             }
