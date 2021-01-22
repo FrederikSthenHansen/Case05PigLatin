@@ -19,7 +19,7 @@ using System.Text;
 namespace PigLatinTextParser
 {
     class TextFileHandler
-    { /*const string _outputPath = @"C:\Users\SA02- Frederik\Documents\Case05PigLatin\PigLatinTextParser\PigLatinTextParser\OutputText\";*/
+    {
        private string _outputPath= new DirectoryInfo(Directory.GetCurrentDirectory()).Parent.Parent.Parent.FullName+ @"\OutputText\";
         
         TextParser myParser = new TextParser();
@@ -263,7 +263,7 @@ namespace PigLatinTextParser
 
         public async Task<bool> WritePigLatinFile(string filePath, int counter, int total) 
         {
-            Console.WriteLine("Current outputpat is: " + _outputPath);
+            //Console.WriteLine("Current outputpat is: " + _outputPath);
             
             string fullPath = filePath;
             Console.WriteLine();
@@ -271,8 +271,7 @@ namespace PigLatinTextParser
             _fileName = Path.GetFileName(filePath);
             Console.WriteLine("Currently processing: "+_fileName);
             //Console.WriteLine("path to intput number: " + counter + "/" + total + " is: "+fullPath);
-            //Task<string[]>[] MyTasks = { readODT(filePath) };
-            //Task<string[]> middleman= 
+            
             RawTextArray = await readFile(filePath);
             //int linetracker=0;
             //First we take in the string array (bunch of text lines) from readfiles
