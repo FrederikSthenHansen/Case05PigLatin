@@ -19,7 +19,9 @@ using System.Text;
 namespace PigLatinTextParser
 {
     class TextFileHandler
-    { const string _outputPath = @"C:\Users\SA02- Frederik\Documents\Case05PigLatin\PigLatinTextParser\PigLatinTextParser\OutputText\";
+    { /*const string _outputPath = @"C:\Users\SA02- Frederik\Documents\Case05PigLatin\PigLatinTextParser\PigLatinTextParser\OutputText\";*/
+       private string _outputPath= new DirectoryInfo(Directory.GetCurrentDirectory()).Parent.Parent.Parent.FullName+ @"\OutputText\";
+        
         TextParser myParser = new TextParser();
 
         #region General Properties
@@ -209,6 +211,7 @@ namespace PigLatinTextParser
         
         private async Task<string[]> readFile(string path)
         {
+            
 
             string[] ret = new string[] { "" };
 
@@ -260,6 +263,7 @@ namespace PigLatinTextParser
 
         public async Task<bool> WritePigLatinFile(string filePath, int counter, int total) 
         {
+            Console.WriteLine("Current outputpat is: " + _outputPath);
             
             string fullPath = filePath;
             Console.WriteLine();
