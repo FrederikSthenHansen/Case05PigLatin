@@ -54,7 +54,7 @@ namespace PigLatinTextParser
             foreach (string file in files)
             {
                 filenr++;
-                WritePigLatinFile(file, filenr, files.Length);
+                //WritePigLatinFile(file, filenr, files.Length);
                 Console.WriteLine("Parsing of file complete: Press any key to continue parsing the next file.");
                 Console.ReadKey();
             }
@@ -261,10 +261,10 @@ namespace PigLatinTextParser
             return newFileName;
         }
 
-        public async Task<bool> WritePigLatinFile(string filePath, int counter, int total) 
+        public async Task<bool> WritePigLatinFile(string filePath, string output) 
         {
             //Console.WriteLine("Current outputpat is: " + _outputPath);
-            
+            _outputPath = output;
             string fullPath = filePath;
             Console.WriteLine();
             _myFileType = Path.GetExtension(filePath);

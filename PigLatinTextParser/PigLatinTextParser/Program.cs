@@ -14,7 +14,8 @@ namespace PigLatinTextParser
 {
     class Program
     {
-
+        //outputDirectory
+       
         private static MemoryCache FilesToProcess = new MemoryCache("myCache", default);
         
         //private const string myPlaceHolder = "This is a 'placeholder text', to make my piglatin parser. /r/n It acts as a placeholder for a fully parsed text of some sort /r /n This specific placeholder i 3 lines long";
@@ -27,6 +28,8 @@ namespace PigLatinTextParser
 
             //Set path to watch for changes
             var directoryToWatch = new DirectoryInfo(Directory.GetCurrentDirectory()).Parent.Parent.Parent.FullName + @"\InputText";
+
+            
 
             if (!Directory.Exists(directoryToWatch))
             {
@@ -85,8 +88,10 @@ namespace PigLatinTextParser
 
         private static async Task ProcessMyFileAsync(CacheEntryRemovedArguments args)
         {
+
             string fileName = new DirectoryInfo(args.CacheItem.Key).Name;
-            WriteLine($"* Cache item removed: {fileName} because {args.RemovedReason}");
+            string outputDirectory = new DirectoryInfo(Directory.GetCurrentDirectory()).Parent.Parent.Parent.FullName + @"\OutputText\";
+        WriteLine($"* Cache item removed: {fileName} because {args.RemovedReason}");
 
             
   
@@ -95,7 +100,7 @@ namespace PigLatinTextParser
                 var fileProcessor = new TextFileHandler();
 
                 //call the parsing method and get a bool for succes or failure
-                bool mybool = await fileProcessor.WritePigLatinFile(args.CacheItem.Key, 1, 1);
+                bool mybool = await fileProcessor.WritePigLatinFile(args.CacheItem.Key, outputDirectory);
                     if (mybool == true)
                     {
                         Console.WriteLine($"Processing of {fileName} completed succesfully! Deleting it from the input folder...");
