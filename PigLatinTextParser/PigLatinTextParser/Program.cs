@@ -23,8 +23,7 @@ namespace PigLatinTextParser
             
             //Console.WriteLine("Name of my chache is: " +FilesToProcess.Name);
 
-            TextFileHandler myTextFileHandler = new TextFileHandler();
-
+            //TextFileHandler myTextFileHandler = new TextFileHandler();
 
             //Set path to watch for changes
             var directoryToWatch = new DirectoryInfo(Directory.GetCurrentDirectory()).Parent.Parent.Parent.FullName + @"\InputText";
@@ -37,6 +36,7 @@ namespace PigLatinTextParser
             {
                 Console.WriteLine($"Watching directory {directoryToWatch} for changes");
                 Console.WriteLine("You can now drop A COPY of the file you want Pig-latinized into the the watched directory.");
+                Console.WriteLine("The App will check for new files to process at 20 second intervals");
                 Console.WriteLine("!BE AWARE THAT ANY FILES PROCESSED WILL BE DELETED FROM THE WATCHED DIRECTORY!.");
 
                 using (var inputFileWatcher = new FileSystemWatcher(directoryToWatch))
@@ -61,9 +61,9 @@ namespace PigLatinTextParser
             }
 
             //myTextFileHandler.ProcessInputFiles();
-            //Console.WriteLine();
-            //Console.WriteLine("Parsing of all input files complete: Press any key to close the App");
-            //Console.ReadKey();
+            Console.WriteLine();
+            Console.WriteLine("Parsing of all input files complete: Press any key to close the App");
+            Console.ReadKey();
         }
         private static void FileCreated(object sender, FileSystemEventArgs e)
         {

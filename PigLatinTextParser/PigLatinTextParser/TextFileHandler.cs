@@ -187,7 +187,7 @@ namespace PigLatinTextParser
                     /*try { */ret = Task.Run(()=> readODT(path)).Result;/* }*/
                     //catch (System.IO.IOException) { }
                 }
-                Console.WriteLine(_fileName+" has been read and the reader will now Dispose of its ra");
+                Console.WriteLine(_fileName+" has been read and the reader will now Dispose of itself");
                 doc.Dispose();
             }
                 //replace with odt text readout
@@ -297,7 +297,7 @@ namespace PigLatinTextParser
                         TreatedTextArray[w] = myParser.RebuildTextLine(words[w]);
                     }
 
-                    Console.WriteLine("Rebuilding the text of " + _fileName); ;
+                   // Console.WriteLine("Rebuilding the text of " + _fileName); ;
                     //Then all lines are added back together to reform the text.
                     TreatedText = TreatedText + myParser.RebuildWholeText(TreatedTextArray);
 

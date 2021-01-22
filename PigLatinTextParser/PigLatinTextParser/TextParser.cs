@@ -278,7 +278,7 @@ namespace PigLatinTextParser
             //Does the word start with a consonant?
             if (_consonants != "")
             {
-                //make sure this isn't a website before pink
+                //make sure this isn't a hyperlink before Pig-latizing it
                 if (!_consonants.Contains("http"))
                 {
                     if (firstLetterIsCapital == true)
