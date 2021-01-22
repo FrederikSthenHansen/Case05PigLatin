@@ -55,15 +55,15 @@ namespace PigLatinTextParser
 
                     inputFileWatcher.EnableRaisingEvents = true;
 
-                    Console.WriteLine("Press enter to quit.");
+                    Console.WriteLine("Press enter at any time to quit the App.");
                     Console.ReadLine();
                 }
             }
 
             //myTextFileHandler.ProcessInputFiles();
-            Console.WriteLine();
-            Console.WriteLine("Parsing of all input files complete: Press any key to close the App");
-            Console.ReadKey();
+            //Console.WriteLine();
+            //Console.WriteLine("Parsing of all input files complete: Press any key to close the App");
+            //Console.ReadKey();
         }
         private static void FileCreated(object sender, FileSystemEventArgs e)
         {
