@@ -162,8 +162,7 @@ namespace PigLatinTextParser
 
             using (var doc = new TextDocument())
             {
-                //this operation causes a crash when parsing 2 or more odt files in parralel
-
+               
                 try
                 {
                     doc.Load(path);
@@ -188,6 +187,8 @@ namespace PigLatinTextParser
                     /*try { */ret = Task.Run(()=> readODT(path)).Result;/* }*/
                     //catch (System.IO.IOException) { }
                 }
+                Console.WriteLine(_fileName+" has been read and the reader will now Dispose of its ra");
+                doc.Dispose();
             }
                 //replace with odt text readout
               
@@ -268,7 +269,7 @@ namespace PigLatinTextParser
             //Console.WriteLine("path to intput number: " + counter + "/" + total + " is: "+fullPath);
             //Task<string[]>[] MyTasks = { readODT(filePath) };
             //Task<string[]> middleman= 
-            RawTextArray = await readODT(filePath);
+            RawTextArray = await readFile(filePath);
             //int linetracker=0;
             //First we take in the string array (bunch of text lines) from readfiles
             Console.WriteLine();
