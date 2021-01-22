@@ -48,9 +48,8 @@ namespace PigLatinTextParser
 
                     inputFileWatcher.Created += FileCreated;
                    
-                  //  inputFileWatcher.Changed += FileChanged;
                     inputFileWatcher.Deleted += FileDeleted;
-                    inputFileWatcher.Renamed += FileRenamed;
+                    
                     inputFileWatcher.Error += WatcherError;
 
                     inputFileWatcher.EnableRaisingEvents = true;
@@ -65,13 +64,7 @@ namespace PigLatinTextParser
             //Console.WriteLine("Parsing of all input files complete: Press any key to close the App");
             //Console.ReadKey();
         }
-        private static void FileCreated(object sender, FileSystemEventArgs e)
-        {
-            WriteLine($"* File created: {e.Name} - type: {e.ChangeType}");
-            
-            //Add file to a cache, so it can be processed
-            AddToCache(e.FullPath);
-        }
+       
 
         private static void AddToCache(string fullPath)
         {
@@ -123,15 +116,18 @@ namespace PigLatinTextParser
             File.Delete(args.CacheItem.Key);
         }
 
+        private static void FileCreated(object sender, FileSystemEventArgs e)
+        {
+            WriteLine($"* File created: {e.Name} - type: {e.ChangeType}");
+
+            //Add file to a cache, so it can be processed
+            AddToCache(e.FullPath);
+        }
+
         private static void FileDeleted(object sender, FileSystemEventArgs e)
         {
             WriteLine($"* File deleted: {e.Name} - type: {e.ChangeType}");
             
-        }
-
-        private static void FileRenamed(object sender, RenamedEventArgs e)
-        {
-            WriteLine($"* File renamed: {e.OldName} to {e.Name} - type: {e.ChangeType}");
         }
 
         private static void WatcherError(object sender, ErrorEventArgs e)
