@@ -91,7 +91,7 @@ namespace PigLatinTextParser
 
             string fileName = new DirectoryInfo(args.CacheItem.Key).Name;
             string outputDirectory = new DirectoryInfo(Directory.GetCurrentDirectory()).Parent.Parent.Parent.FullName + @"\OutputText\";
-        WriteLine($"* Cache item removed: {fileName} because {args.RemovedReason}");
+            WriteLine($"* Cache item removed: {fileName} because {args.RemovedReason}");
 
             
   
