@@ -28,12 +28,12 @@ namespace PiglatinparserV2
         private string _myFileType = "";
         private string _fileName = "";
         private bool _fileIsValid = true;
+
+        private string[] _splitter = { ". " };
         #endregion
 
         private async Task<string[]> readFile(string path)
         {
-
-
             string[] ret = new string[] { "" };
 
 
@@ -72,9 +72,9 @@ namespace PiglatinparserV2
 
             // string lineChange = ". /r/n ";
             //inputText = inputText.Replace(". ", lineChange);
-
+            //string[] splitter = { ". "};
             //split text on every "."
-            string[] ret = inputText.Split(". ");
+            string[] ret = inputText.Split(_splitter,StringSplitOptions.None);
 
             for (int line = 0; line < ret.Length; line++)
             {
@@ -132,7 +132,11 @@ namespace PiglatinparserV2
             Console.Write(totalText);
             docs.Close();
             word.Quit();
-            string[] ret = formatOddFileLayout(totalText);
+            string[] ret;
+
+            if (_myFileType != ".txt")
+                {  ret = formatOddFileLayout(totalText); }
+            else { ret = totalText.Split(_splitter, StringSplitOptions.None); }
             return ret;
         }
 
@@ -151,11 +155,12 @@ namespace PiglatinparserV2
             return newFileName;
         }
 
-        public async Task<bool> WritePigLatinFile(string filePath, string output)
+        public async Task<bool> WritePigLatinFile(string filePath/*, string output*/)
         {
-            //Console.WriteLine("Current outputpat is: " + _outputPath);
-            _outputPath = output;
             string fullPath = filePath;
+            _outputPath = filePath.Replace("InputText","OutputText");
+            Console.WriteLine("Current output path is: " + _outputPath);
+            
             Console.WriteLine();
             _myFileType = Path.GetExtension(filePath);
             _fileName = Path.GetFileName(filePath);
@@ -215,6 +220,8 @@ namespace PiglatinparserV2
                 _fileName = _fileName.Replace(".pdf", _myFileType);
                 _fileName = _fileName.Replace(".docx", _myFileType);
                 _fileName = _fileName.Replace(".odt", _myFileType);
+                _fileName = _fileName.Replace(".doc", _myFileType);
+                fullPath = fullPath.Replace(".doc", _myFileType);
                 fullPath = fullPath.Replace(".pdf", _myFileType);
                 fullPath = fullPath.Replace(".docx", _myFileType);
                 fullPath = fullPath.Replace(".odt", _myFileType);
