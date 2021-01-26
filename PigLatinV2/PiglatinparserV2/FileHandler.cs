@@ -121,7 +121,9 @@ namespace PiglatinparserV2
             object readOnly = true;
             Microsoft.Office.Interop.Word.Document docs = word.Documents.Open(ref pathObject, ref miss, ref readOnly, ref miss, ref miss,
                         ref miss, ref miss, ref miss, ref miss, ref miss, ref miss, ref miss, ref miss, ref miss, ref miss, ref miss);
-            string totalText = "";      //the whole document
+            string totalText = "";      
+            
+            //the whole document
             for (int i = 0; i < docs.Paragraphs.Count; i++)
             {
                 //Determine the beginning of an entire paragraph and intercept the table name
