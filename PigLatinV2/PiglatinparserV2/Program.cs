@@ -26,7 +26,7 @@ namespace PiglatinparserV2
             else
             {
                 Console.WriteLine($"Watching directory {directoryToWatch} for changes");
-                Console.WriteLine("You can now drop A COPY of the file you want Pig-latinized into the the watched directory.");
+                Console.WriteLine("You can now drop a COPY of the file you want Pig-latinized into the the watched directory.");
                 Console.WriteLine("The App will check for new files to process at 20 second intervals");
                 Console.WriteLine("!BE AWARE THAT ANY FILES PROCESSED WILL BE DELETED FROM THE WATCHED DIRECTORY!.");
 
@@ -75,7 +75,8 @@ namespace PiglatinparserV2
         {
 
             string fileName = new DirectoryInfo(args.CacheItem.Key).Name;
-            /*string outputDirectory = new DirectoryInfo(Directory.GetCurrentDirectory()).Parent.Parent.Parent.FullName + @"\OutputText\"*/;
+            /*string outputDirectory = new DirectoryInfo(Directory.GetCurrentDirectory()).Parent.Parent.Parent.FullName + @"\OutputText\"*/
+            ;
             Console.WriteLine($"* Cache item removed: {fileName} because {args.RemovedReason}");
 
 
@@ -92,17 +93,18 @@ namespace PiglatinparserV2
                     Console.WriteLine("The parsed text File can be found in the 'OutputText' folder in this application.");
                     Console.WriteLine();
                 }
-                else { Console.WriteLine($"Processing of {fileName} Failed, as the input file is invalid! Deleting it from the input folder... "); }
+                else { Console.WriteLine($"Processing of {fileName} Failed, as the input file is invalid!"); }
 
 
             }
 
             else
             {
-                Console.WriteLine($"WARNING: {args.CacheItem.Key} was removed unexpectedly and may not be processed because {args.RemovedReason}");
-                Console.WriteLine("Please remove the file in question from the input folder");
+                Console.WriteLine($"WARNING: {args.CacheItem.Key} was removed unexpectedly and cannot be processed for the following reason: {args.RemovedReason}");
+               // Console.WriteLine("Please remove the file in question from the input folder");
                 Console.WriteLine();
             }
+            Console.WriteLine($"Deleting {fileName} from the input folder...");
             File.Delete(args.CacheItem.Key);
         }
 

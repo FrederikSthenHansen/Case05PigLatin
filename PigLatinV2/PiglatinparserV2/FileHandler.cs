@@ -131,7 +131,7 @@ namespace PiglatinparserV2
                 //......
                 totalText += docs.Paragraphs[i + 1].Range.Text.ToString();
             }
-            Console.Write(totalText);
+            //Console.Write(totalText);
             docs.Close();
             word.Quit();
             string[] ret;
@@ -209,6 +209,8 @@ namespace PiglatinparserV2
                 //Console.WriteLine(TreatedText);
                 //Console.WriteLine();
 
+                fullPath = filePath.Replace(@"\InputText\", @"\OutputText\");
+
                 #region Placeholder code to allow PDF to be converted to txt
 
                 Console.WriteLine("printing " + _fileName + " to .txt file");
@@ -216,7 +218,7 @@ namespace PiglatinparserV2
 
 
 
-                fullPath = filePath.Replace(@"\InputText\", @"\OutputText\");
+                
 
 
                 _fileName = _fileName.Replace(".pdf", _myFileType);
@@ -227,6 +229,10 @@ namespace PiglatinparserV2
                 fullPath = fullPath.Replace(".pdf", _myFileType);
                 fullPath = fullPath.Replace(".docx", _myFileType);
                 fullPath = fullPath.Replace(".odt", _myFileType);
+
+
+                //hardcoded fix for .txtx error
+                fullPath = fullPath.Replace(".txtx", _myFileType);
 
                 #endregion
 
