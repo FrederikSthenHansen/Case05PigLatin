@@ -88,8 +88,13 @@ namespace PiglatinparserV2
 
             using (PdfDocument document = PdfDocument.Open(path))
             {
+                 
+                //int myPageCount = document.NumberOfPages;
+                int myPdfTextLenght = 0;
                 string[] ret = new string[document.NumberOfPages];
-                for (int page = 1; page < document.NumberOfPages; page++)
+                string[][] PDFtext = new string[document.NumberOfPages][];
+
+                for (int page = 1; page <= document.NumberOfPages; page++)
                 {
                     #region Reading text for Linguistic logic purposes
                     Page myPage = document.GetPage(page);
@@ -97,8 +102,12 @@ namespace PiglatinparserV2
                     pageText = pageText.TrimStart();
                     pageText = pageText.TrimEnd();
 
+                    
+                    PDFtext[page - 1] = formatOddFileLayout(pageText);
+                    myPdfTextLenght = myPdfTextLenght + PDFtext[page-1].Length;
+                    
                     //layout edits
-                    ret = formatOddFileLayout(pageText);
+                   // ret[page-1] = formatOddFileLayout(pageText);
                     #endregion
 
                     #region Reading Letters for layout purposes
@@ -106,6 +115,17 @@ namespace PiglatinparserV2
                     //pigLatinPDF.GetPage(page) readPDFLayout(myPage, document.NumberOfPages);
                     #endregion
                 }
+                ret = new string[myPdfTextLenght];
+                int copyIndex = 0;
+
+                //for (int page = 1; page <= document.NumberOfPages; page++) 
+                //{
+                    foreach (var array in PDFtext)
+                    {
+                        array.CopyTo(ret, copyIndex);
+                        copyIndex = copyIndex + array.Length - 1;
+                    }
+                //}
 
                 return ret;
             }
@@ -178,8 +198,10 @@ namespace PiglatinparserV2
             if (_fileIsValid == true)
             {
                 Console.WriteLine($"Parsing {_fileName} to PigLatin...");
+                int lineNumber = 1;
                 foreach (string line in RawTextArray)
                 {
+                    Console.WriteLine($"Now parsing Line number {lineNumber} out of {RawTextArray.Length} total lines...");
                     //Console.WriteLine(line);
                     //Strings are broken down into individual words
                     string[] words = myParser.BreakUpText(line);
@@ -188,6 +210,7 @@ namespace PiglatinparserV2
 
                     for (int w = 0; w < words.Length; w++)
                     {   //All words in each line are turned to Pig latin.
+                        
                         words[w] = myParser.MakePigLatinWord(words[w]);
 
                         //write to console
@@ -201,7 +224,7 @@ namespace PiglatinparserV2
                     //Then all lines are added back together to reform the text.
                     TreatedText = TreatedText + myParser.RebuildWholeText(TreatedTextArray);
 
-
+                    lineNumber++;
                 }
                 //the finished text is printed to console and written to outputFolder:
                 //Console.WriteLine();
