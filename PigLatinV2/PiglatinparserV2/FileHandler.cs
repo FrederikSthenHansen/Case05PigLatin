@@ -230,8 +230,8 @@ namespace PiglatinparserV2
 
             for (int i = 0; i < numberOfThreads; ++i)
             {
-                threads[i] = new Thread(new ThreadStart(myWork(i)));
-                threads[i].Start(i);
+                //threads[i] = new Thread(new ParameterizedThreadStart(myWork(i)));
+                //threads[i].Start(i);
             }
 
             void myWork(object arg/*, int ratio*/)
@@ -265,60 +265,49 @@ namespace PiglatinparserV2
 
 
 
-            //while (lineNumber < RawTextArray.Length)
+
+
+            //#region Template for Multithreadded loop through collection
+            //List<int> a = new List<int> { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 };
+            //int num_threads = 2;
+            //int thread_elements = a.Count / num_threads;
+
+            //// start the threads
+            ////Thread[] threads = new Thread[num_threads];
+            //for (int i = 0; i < num_threads; ++i)
             //{
-
-            //    //Console.WriteLine(line);
-            //    //Strings are broken down into individual words
-
-            //    new Thread(new ThreadStart(PigLatinLine(lineNumber)));
-            //    Task taskA = new Task(PigLatinLine(lineNumber));
-            //    taskA.Start();
-
-            //    lineNumber = lineNumber++;
+            //    //threads[i] = new Thread(new ThreadStart(Work));
+            //    threads[i].Start(i);
             //}
 
 
-            #region Template for Multithreadded loop through collection
-            List<int> a = new List<int> { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 };
-            int num_threads = 2;
-            int thread_elements = a.Count / num_threads;
+            //// wait all threads to finish
+            //for (int i = 0; i < num_threads; ++i)
+            //{
+            //    threads[i].Join();
+            //}
 
-            // start the threads
-            //Thread[] threads = new Thread[num_threads];
-            for (int i = 0; i < num_threads; ++i)
-            {
-                //threads[i] = new Thread(new ThreadStart(Work));
-                threads[i].Start(i);
-            }
-            
+            //void Work(object arg)
+            //{
+            //    Console.WriteLine("Thread #" + arg + " has begun...");
 
-            // wait all threads to finish
-            for (int i = 0; i < num_threads; ++i)
-            {
-                threads[i].Join();
-            }
+            //    //calculate my working range[start, end)
+            //    int id = (int)arg;
+            //    int mystart = id * thread_elements;
+            //    int myend = (id + 1) * thread_elements;
 
-            void Work(object arg)
-            {
-                Console.WriteLine("Thread #" + arg + " has begun...");
+            //    // start work on my range!!
+            //    for (int i = mystart; i < myend; ++i)
+            //        Console.WriteLine("Thread #" + arg + " Element " + a[i]);
 
-                //calculate my working range[start, end)
-                int id = (int)arg;
-                int mystart = id * thread_elements;
-                int myend = (id + 1) * thread_elements;
+            //}
 
-                // start work on my range!!
-                for (int i = mystart; i < myend; ++i)
-                    Console.WriteLine("Thread #" + arg + " Element " + a[i]);
 
-            }
-            #endregion
-            #endregion
 
         }
+        #endregion
 
-            public async Task<bool> WritePigLatinFile(string filePath/*, string output*/)
+        public async Task<bool> WritePigLatinFile(string filePath/*, string output*/)
             {
                 string fullPath = filePath;
                 _outputPath = filePath.Replace("InputText", "OutputText");
