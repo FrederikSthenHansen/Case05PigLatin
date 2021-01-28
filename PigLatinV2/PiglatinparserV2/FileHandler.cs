@@ -11,6 +11,7 @@ using UglyToad.PdfPig.Fonts.Standard14Fonts;
 using UglyToad.PdfPig.Writer;
 using Page = UglyToad.PdfPig.Content.Page;
 using PageSize = UglyToad.PdfPig.Content.PageSize;
+using System.Threading;
 
 namespace PiglatinparserV2
 {
@@ -50,7 +51,7 @@ namespace PiglatinparserV2
             {
                 ret = readPDF(path);
             }
-            else if (_myFileType == ".docx"|| _myFileType == ".odt"|| _myFileType == ".doc"|| _myFileType == ".txt")
+            else if (_myFileType == ".docx" || _myFileType == ".odt" || _myFileType == ".doc" || _myFileType == ".txt")
             {
                 ret = readDocx(path);
             }
@@ -74,7 +75,7 @@ namespace PiglatinparserV2
             //inputText = inputText.Replace(". ", lineChange);
             //string[] splitter = { ". "};
             //split text on every "."
-            string[] ret = inputText.Split(_splitter,StringSplitOptions.None);
+            string[] ret = inputText.Split(_splitter, StringSplitOptions.None);
 
             for (int line = 0; line < ret.Length; line++)
             {
@@ -88,7 +89,7 @@ namespace PiglatinparserV2
 
             using (PdfDocument document = PdfDocument.Open(path))
             {
-                 
+
                 //int myPageCount = document.NumberOfPages;
                 int myPdfTextLenght = 0;
                 string[] ret = new string[document.NumberOfPages];
@@ -102,12 +103,12 @@ namespace PiglatinparserV2
                     pageText = pageText.TrimStart();
                     pageText = pageText.TrimEnd();
 
-                    
+
                     PDFtext[page - 1] = formatOddFileLayout(pageText);
-                    myPdfTextLenght = myPdfTextLenght + PDFtext[page-1].Length;
-                    
+                    myPdfTextLenght = myPdfTextLenght + PDFtext[page - 1].Length;
+
                     //layout edits
-                   // ret[page-1] = formatOddFileLayout(pageText);
+                    // ret[page-1] = formatOddFileLayout(pageText);
                     #endregion
 
                     #region Reading Letters for layout purposes
@@ -120,11 +121,11 @@ namespace PiglatinparserV2
 
                 //for (int page = 1; page <= document.NumberOfPages; page++) 
                 //{
-                    foreach (var array in PDFtext)
-                    {
-                        array.CopyTo(ret, copyIndex);
-                        copyIndex = copyIndex + array.Length - 1;
-                    }
+                foreach (var array in PDFtext)
+                {
+                    array.CopyTo(ret, copyIndex);
+                    copyIndex = copyIndex + array.Length - 1;
+                }
                 //}
 
                 return ret;
@@ -141,8 +142,8 @@ namespace PiglatinparserV2
             object readOnly = true;
             Microsoft.Office.Interop.Word.Document docs = word.Documents.Open(ref pathObject, ref miss, ref readOnly, ref miss, ref miss,
                         ref miss, ref miss, ref miss, ref miss, ref miss, ref miss, ref miss, ref miss, ref miss, ref miss, ref miss);
-            string totalText = "";      
-            
+            string totalText = "";
+
             //the whole document
             for (int i = 0; i < docs.Paragraphs.Count; i++)
             {
@@ -157,7 +158,7 @@ namespace PiglatinparserV2
             string[] ret;
 
             if (_myFileType != ".txt")
-                {  ret = formatOddFileLayout(totalText); }
+            { ret = formatOddFileLayout(totalText); }
             else { ret = totalText.Split(_splitter, StringSplitOptions.None); }
             return ret;
         }
@@ -177,17 +178,157 @@ namespace PiglatinparserV2
             return newFileName;
         }
 
-        public async Task<bool> WritePigLatinFile(string filePath/*, string output*/)
+
+        #region Async Test Code
+        private void PigLatinLine(int line)
         {
-            string fullPath = filePath;
-            _outputPath = filePath.Replace("InputText","OutputText");
-            Console.WriteLine("Current output path is: " + _outputPath);
+            Console.WriteLine($"Now parsing Line number {line + 1} out of {RawTextArray.Length} total lines...");
+
+
+
+            string[] words = myParser.BreakUpText(RawTextArray[line]);
+
+
+
+            TreatedTextArray = new string[words.Length];
+
+            for (int w = 0; w < words.Length; w++)
+            {   //All words in each line are turned to Pig latin.
+
+                words[w] = myParser.MakePigLatinWord(words[w]);
+
+                //write to console
+                //Console.WriteLine(words[w]);
+
+                //each line is reconstruced word by word
+                TreatedTextArray[w] = myParser.RebuildTextLine(words[w]);
+            }
+
+
+
+            // Console.WriteLine("Rebuilding the text of " + _fileName); ;
+            //Then all lines are added back together to reform the text.
+            TreatedText = TreatedText + myParser.RebuildWholeText(TreatedTextArray);
+
+
+            //Action Ret = new Action(myParser.BreakUpText(TreatedText));
+            //return Ret;
+
+
+        }
+
+    
+
+        private async Task asyncBreakAndParse(string[] RawTextArray)
+        {
+            int numberOfThreads = 4;
+            int ThreadElementRatio = RawTextArray.Length / numberOfThreads;
+
+            Thread[] threads = new Thread[numberOfThreads];
+            int lineNumber = 0;
+
+
+            for (int i = 0; i < numberOfThreads; ++i)
+            {
+                threads[i] = new Thread(new ThreadStart(myWork(i)));
+                threads[i].Start(i);
+            }
+
+            void myWork(object arg/*, int ratio*/)
+            {
+                Console.WriteLine("Thread #" + arg + " has begun...");
+
+                //calculate my working range[start, end)
+                int id = (int)arg;
+                int mystart = id * ThreadElementRatio;
+                int myend = (id + 1) * ThreadElementRatio;
+
+                // start work on my range!!
+                for (int z = mystart; z < myend; ++z)
+                { PigLatinLine(z); }
+
+                //wait for threads to finish
+                for (int i = 0; i < numberOfThreads; ++i)
+                {
+                    threads[i].Join();
+                }
+
+                // this works fine if the total number of elements is divisable by num_threads
+                // but if we have 500 elements, 7 threads, then thread_elements = 500 / 7 = 71
+                // but 71 * 7 = 497, so that there are 3 elements not processed
+                // process them here:
+                int actual = ThreadElementRatio * numberOfThreads;
+                for (int i = actual; i < RawTextArray.Length; ++i)
+                {PigLatinLine(i); }
+
+             }
+
+
+
+            //while (lineNumber < RawTextArray.Length)
+            //{
+
+            //    //Console.WriteLine(line);
+            //    //Strings are broken down into individual words
+
+            //    new Thread(new ThreadStart(PigLatinLine(lineNumber)));
+            //    Task taskA = new Task(PigLatinLine(lineNumber));
+            //    taskA.Start();
+
+            //    lineNumber = lineNumber++;
+            //}
+
+
+            #region Template for Multithreadded loop through collection
+            List<int> a = new List<int> { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 };
+            int num_threads = 2;
+            int thread_elements = a.Count / num_threads;
+
+            // start the threads
+            //Thread[] threads = new Thread[num_threads];
+            for (int i = 0; i < num_threads; ++i)
+            {
+                //threads[i] = new Thread(new ThreadStart(Work));
+                threads[i].Start(i);
+            }
             
-            Console.WriteLine();
-            _myFileType = Path.GetExtension(filePath);
-            _fileName = Path.GetFileName(filePath);
-            Console.WriteLine("Currently processing: " + _fileName);
-            //Console.WriteLine("path to intput number: " + counter + "/" + total + " is: "+fullPath);
+
+            // wait all threads to finish
+            for (int i = 0; i < num_threads; ++i)
+            {
+                threads[i].Join();
+            }
+
+            void Work(object arg)
+            {
+                Console.WriteLine("Thread #" + arg + " has begun...");
+
+                //calculate my working range[start, end)
+                int id = (int)arg;
+                int mystart = id * thread_elements;
+                int myend = (id + 1) * thread_elements;
+
+                // start work on my range!!
+                for (int i = mystart; i < myend; ++i)
+                    Console.WriteLine("Thread #" + arg + " Element " + a[i]);
+
+            }
+            #endregion
+            #endregion
+
+        }
+
+            public async Task<bool> WritePigLatinFile(string filePath/*, string output*/)
+            {
+                string fullPath = filePath;
+                _outputPath = filePath.Replace("InputText", "OutputText");
+                Console.WriteLine("Current output path is: " + _outputPath);
+
+                Console.WriteLine();
+                _myFileType = Path.GetExtension(filePath);
+                _fileName = Path.GetFileName(filePath);
+                Console.WriteLine("Currently processing: " + _fileName);
+                //Console.WriteLine("path to intput number: " + counter + "/" + total + " is: "+fullPath);
 
             RawTextArray = await readFile(filePath);
             //int linetracker=0;
@@ -210,7 +351,7 @@ namespace PiglatinparserV2
 
                     for (int w = 0; w < words.Length; w++)
                     {   //All words in each line are turned to Pig latin.
-                        
+
                         words[w] = myParser.MakePigLatinWord(words[w]);
 
                         //write to console
@@ -241,7 +382,7 @@ namespace PiglatinparserV2
 
 
 
-                
+
 
 
                 _fileName = _fileName.Replace(".pdf", _myFileType);
