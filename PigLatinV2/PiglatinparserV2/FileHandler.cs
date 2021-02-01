@@ -43,10 +43,6 @@ namespace PiglatinparserV2
             //reset _fileisvalid
             _fileIsValid = true;
 
-            //if (_myFileType == ".txt")
-            //{
-            //    ret = readDocx(path);
-            //}
             if (_myFileType == ".pdf")
             {
                 ret = readPDF(path);
@@ -55,10 +51,7 @@ namespace PiglatinparserV2
             {
                 ret = readDocx(path);
             }
-            //else if (_myFileType == ".odt")
-            //{
-            //    ret = readDocx(path);
-            //}
+           
             else
             {
                 Console.WriteLine("input file format " + _myFileType + " is not supported. Please only put valid text files in the input folder");
