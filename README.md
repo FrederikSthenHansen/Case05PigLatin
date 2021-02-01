@@ -1,4 +1,4 @@
-# Case05PigLatin, an excersize in file-processng 
+# Case05PigLatin, an excersize in file-processing 
 - Frederik Sthen Hansen
 
 The task was to create an application that can read any text file file and write pig latin copies of their contents to a seperate files.
