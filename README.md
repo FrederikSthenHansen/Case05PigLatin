@@ -6,7 +6,7 @@ The task was to create an application that can read any text file file and write
 
 Which project to open in this Repo?:
 
-PigLatinParser V2. is the most functional edition of the Application. The original is left in the repository for historical/sentimental purposes. The change from .net core to .net Framwork was done to implement better Nuget packages for File processing. 
+PigLatinParser V2. is the most functional edition of the Application. The original project is left in the repository for documentation/sentimental purposes. The change from .net core to .net Framwork was done to implement better Nuget packages for File processing. 
 
 
 
